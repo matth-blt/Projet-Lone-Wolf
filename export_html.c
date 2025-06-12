@@ -7,38 +7,53 @@ FILE * start_section(char * section_name, char * filename){
         printf("Unable to open file <%s>\n", filename), exit(EXIT_FAILURE);
     }
     char line[LINE_SIZE];
+    int n=0;
     while (fgets(line, sizeof(line), file)) {
-
         char * section = strstr(line,"<section>");
-        if (section == NULL)
-        {
-            
+        int nbr_section;
+        if (section != NULL) {
+            sscanf(line, "<section>sect%d", &nbr_section);
+            n++;
+        } else if (n == 0) {
+            perror("Erreur Lecture Section !");
+            exit(1);
         }
-        
-        if (condition)//fin section
-        {
-            break;
+
+        char file_html[256];
+        strcpy(file_html, html_file_generator(nbr_section));
+        FILE * write_file_html = fopen(file_html, 'w');
+
+        // fin section
+        // for (int i = 0 ; i < LINE_SIZE ; i++) {
+        //     if (line[i] == line[i + 1] == line[i + 2] == " ")
+        //         line[i] = '\0';
+        // }
+        if (strlen(line)<=2) {
+            break;    
         }
-        
-        
     }
-    
-    free(section);
+
     return file;
 }
 
-void html_file_generator(int section_nbr)
+char * html_file_generator(int section_nbr)
 {
-    char command_line[256];
+    char name[256];
+    sprintf(name, "sect%d.html", section_nbr);
+    printf("nom html : %s", name);
+
     system("cd export");
-    sprintf(command_line, "touch sect%d.html", section_nbr);
+
+    char command_line[256];
+    sprintf(command_line, "touch %s", name);
     system(command_line);
+
+    return name;
 }
 
 //Fermer le fichier
 void end_section(FILE * file)
 {
-    // html_file_generator();
     fclose(file);
 }
 
