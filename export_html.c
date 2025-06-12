@@ -62,4 +62,3 @@ void end_section(FILE * file)
 //Traiter un choice
 //Trouver le nom de la section --> ouvrir celle choisie
 
-//test lalala
