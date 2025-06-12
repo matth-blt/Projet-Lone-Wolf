@@ -2,21 +2,27 @@
 
 void start_section(char * filename)
 {
+    //Ouverture du fichier source
     FILE * file = fopen(filename, "r");
     if (file == NULL) {
         printf("Unable to open file <%s>\n", filename), exit(EXIT_FAILURE);
     }
 
+    //Initialisations
     char line[LINE_SIZE];
     FILE * write_file_html = NULL;
     int nbr_section;
     char file_html[256];
 
+    //Lecture du fichier ligne par ligne
     while (fgets(line, sizeof(line), file)) {
+        //Détection de section
         char * section = strstr(line, "<section>");
         if (section != NULL) {
             end_section(write_file_html);
             sscanf(line, "<section>sect%d", &nbr_section);
+
+            //Création du fichier HTML
             sprintf(file_html, "./export/sect%d.html", nbr_section);
 
             write_file_html = fopen(file_html, "w");
@@ -25,6 +31,7 @@ void start_section(char * filename)
                 exit(1);
             }
 
+            //Écriture du header HTML
             fprintf(write_file_html,
                 "<!DOCTYPE html>\n"
                 "<html>\n\t<head>\n"
@@ -35,6 +42,7 @@ void start_section(char * filename)
                 file_html + 9);
         }
 
+        //Écriture du contenu HTML
         if (write_file_html != NULL) {
             fprintf(write_file_html, "\t%s", line);
         }
