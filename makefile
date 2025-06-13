@@ -15,7 +15,7 @@ CC = gcc
 CFLAGS = -Wall
 LDFLAGS = -lm
 
-SRC = main.c export_html.c
+SRC = main.c export_html.c game.c
 OBJ = $(SRC:.c=.o)
 
 ifeq ($(OS_DETECTED),windows)
