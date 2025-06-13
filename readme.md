@@ -22,4 +22,4 @@
 
 - Matthieu BALLOUT
 - Ethan COCHARD
-- Lia 
+- Lia ZADOROZNYJ
