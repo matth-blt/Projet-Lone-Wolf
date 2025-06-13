@@ -46,7 +46,7 @@ void start_section(char * filename)
         char * balise = NULL;
         if (write_file_html != NULL) {
             balise = strstr(line, "<a>");
-            char chaine1[30], chaine2[30];
+            char chaine1[256], chaine2[512];
             if (balise != NULL) {
                 strcpy(chaine1, balise);
 
@@ -63,16 +63,14 @@ void start_section(char * filename)
                 sprintf(chaine2, "<a href=\"sect%d.html\">", nbr);
                 strcat(chaine2, chaine1 + 3);
                 strcpy(balise, chaine2);
-                fprintf(write_file_html, "\t%s", line);
-            } else {
-                fprintf(write_file_html, "\t%s", line);
             }
+            fprintf(write_file_html, "\t%s", line);
         }
+
     }
 
     end_section(write_file_html);
     fclose(write_file_html);
-
     fclose(file);
 }
 
@@ -81,7 +79,6 @@ void end_section(FILE * write_file_html)
     if (write_file_html != NULL) {
         fprintf(write_file_html, "\t</section>\n\t<script type=\"text/javascript\" src=\"javascript.js\"></script>"
                                  "\n\t</body>\n</html>\n");
-        fclose(write_file_html);
         write_file_html = NULL;
     }
 }

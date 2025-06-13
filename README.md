@@ -16,7 +16,7 @@
     - `make hsup` : supprime tout les fichiers HTML (s'ils existent)
 
 3. **Lancer le programme**
-    - `./projet.exe --file <nom fichier>` :
+    - `./projet.exe --file <nom fichier>`
 
 ## Auteurs
 
