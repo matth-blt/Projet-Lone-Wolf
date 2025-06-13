@@ -1,4 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const section = document.querySelector("section");
-  section.innerHTML = `<h1>${section.textContent.trim()}</h1>` + section.innerHTML.slice(section.textContent.trim().length);
+  const section = document.querySelector("section") ;
+  const h1 = document.createElement("h1") ;
+
+  h1.textContent = section.firstChild.textContent.trim();
+  section.firstChild.remove() ;
+  section.prepend(h1) ;
 });
