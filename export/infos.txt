@@ -1,3 +1,0 @@
-// Les fichiers HTML doivent être générés ici
-// Texte + liens les articulant
-// Aucun ajout manuel
