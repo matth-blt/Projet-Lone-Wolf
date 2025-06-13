@@ -168,7 +168,7 @@ void replace_in_line(char *line, const char *old, const char *new) {
     // Calcul des positions
     size_t before = pos - line;
     size_t old_len = strlen(old);
-    size_t new_len = strlen(new);
+    // size_t new_len = strlen(new);
 
     // Copie avant le mot à remplacer
     strncpy(buffer, line, before);
