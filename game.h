@@ -13,6 +13,6 @@ typedef struct {
 } Player;
 
 int generate_rnt();
-Player * player_generator(char name[256]) ;
+Player * player_generator(char name[256]);
 
 #endif
