@@ -153,7 +153,8 @@ void html_verificator(char * line, int nbr_section)
     //     strcpy(line,token);
     replace_in_line(line, "illustration", "div");
     replace_in_line(line, "instance", "img");
-    replace_in_line(line, "choice idref", "p");
+    
+
 }
 
 

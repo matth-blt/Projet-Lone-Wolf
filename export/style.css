@@ -17,6 +17,10 @@
     body {
       background-color: var(--bg-color);
     }
+
+    body {
+      background-color: var(--bg-color);
+    }
       
     h1 {
         font-size: 36px ;
