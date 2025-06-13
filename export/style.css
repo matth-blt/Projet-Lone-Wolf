@@ -1,6 +1,6 @@
   
     :root {
-      --primary-color: #3690eb;
+      --primary-color: #62a7ec;
       --bg-color: #222222;
       --text-color: #d7d7d7;
     }
@@ -8,11 +8,28 @@
     * {
       font-family: 'Inter', 'sans-serif';
       text-decoration: none;
-      /* background-color: var(--bg-color);
-      color: var(--text-color); */
+      margin-top: 1rem;
+      background-color: var(--bg-color);
+      color: var(--text-color);
     }
       
     h1 {
         font-size: 36px;
         font-weight: 900;
+        margin: 0;
+        text-align: center;
+        color: var(--primary-color);
+    }
+
+    p {
+      text-align: justify;
+    }
+
+    a {
+      color:var(--primary-color);
+    }
+
+    section {
+      max-width: 80%;
+      margin: 0 auto;
     }
