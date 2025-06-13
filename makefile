@@ -21,8 +21,8 @@ OBJ = $(SRC:.c=.o)
 ifeq ($(OS_DETECTED),windows)
     EXE = projet.exe
     RM = del /Q
-    RUN = .\\$(EXE)
-    RMHTML = del /Q .\\export\\*.html
+    RUN = ./$(EXE)
+    RMHTML = del /Q export/*.html
 else
     EXE = projet
     RM = rm -f
