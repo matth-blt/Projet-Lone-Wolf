@@ -6,8 +6,8 @@ Player * player_generator(char name[256])
 {
     Player * p1 = malloc(sizeof(Player));
     strcpy(p1->name, name);
-    p1->hability = generate_rnt() + 10;
-    p1->endurance = generate_rnt() + 20;
+    p1->hability = generate_rnt() + 10;//10-19
+    p1->endurance = generate_rnt() + 20;//20-29
     return p1;
 }
 //RC = ton HC – HC de l’ennemi (limites le RC entre –11 et +11 s’il dépasse)
