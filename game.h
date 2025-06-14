@@ -34,10 +34,6 @@ typedef struct {
 
 int generate_rnt();
 Player * player_generator(char name[256]);
-<<<<<<< HEAD
-Bool discipline_choice();
-=======
 void calcule_point(int rc, int nbr_rand, int* hero,int* enemi);
->>>>>>> 6f4a54d98a4b913e9dcdc85c0f6d5ae6f0ee4023
 
 #endif
