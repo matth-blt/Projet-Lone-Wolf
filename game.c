@@ -1,4 +1,5 @@
 #include "game.h"
+// #include <emscripten.h>
 
 int generate_rnt() { return rand() % 10; }
 
@@ -104,6 +105,48 @@ void discipline_choice(Player * p1)
     }
 }
 
+// void discipline_choice(Player * p1, int choice)
+// {
+//     char * weapon_names[10] = {"Dagger", "Spear", "Mace", "Short Sword", 
+//                               "Warhammer", "Sword", "Axe", "Quarterstaff",
+//                               "Broadsword", "Bow"};
+    
+//     choice--;
+//     if (p1->nbr_discipline >= 6) {
+//         emscripten_run_script("updateDisplay('Vous avez déjà choisi 6 disciplines.')");
+//         return;
+//     }
+    
+//     if (choice >= 0 && choice < 10 && p1->tab_discipline[choice] == false) {
+//         p1->tab_discipline[choice] = true;
+//         p1->nbr_discipline++;
+//         char msg[256];
+//         sprintf(msg, "Discipline %d ajoutée. Total : %d/6", choice + 1, p1->nbr_discipline);
+
+//         char script[256];
+//         sprintf(script, "updateDisplay('%s')", msg);
+//         emscripten_run_script_string(script);
+
+        
+//         if (choice == weaponskill) {
+//             p1->weaponskill_weapon = generate_rnt();
+//             sprintf(msg, "[Le Bonus s'appliquera à l'arme : %s]", weapon_names[p1->weaponskill_weapon]);
+//             char script2[256];
+//             sprintf(script2, "updateDisplay('%s')", msg);
+//             emscripten_run_script_string(script2);
+//             if (p1->tab_weapon[p1->weaponskill_weapon]) {
+//                 emscripten_run_script("updateDisplay('[Arme Possédée, +2 en habilité en combat si équipé]')");
+//             }
+//         }
+        
+//         if (p1->nbr_discipline == 6) {
+//             emscripten_run_script("onDisciplinesComplete()");
+//         }
+//     } else {
+//         emscripten_run_script("updateDisplay('Choix invalide ou déjà possédé !')");
+//     }
+// }
+
 void gain_gold(Player * p1, int amount)
 {
     p1->bag.gold += amount;
@@ -113,7 +156,7 @@ void gain_gold(Player * p1, int amount)
     }
 }
 
-void eating(Player * p1)
+void eat(Player * p1)
 {
     if (p1->tab_discipline[hunting] == true) {
         printf("Pas besoin de manger");
@@ -125,7 +168,7 @@ void eating(Player * p1)
     }
 }
 
-void healing(Player * p1)
+void heal(Player * p1)
 {
     if (p1->combat == false) {
         if (p1->bag.potions_healing > 0) {
@@ -181,24 +224,22 @@ void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
     fclose(file);
 }
 
-int calcule_rc(int hab_hero, int hab_enemi){
-    int rc = hab_hero-hab_enemi;
-    if (rc< -11){
+int calcule_rc(int hab_hero, int hab_enemi)
+{
+    int rc = hab_hero - hab_enemi;
+    if (rc < -11)
         rc = -11;
-    }
-    if (rc>11){
+    if (rc > 11)
         rc = 11;
-    }
-    return rc;
+        return rc;
 }
 
-
-void combat(Player * p1,Player * p2){
-    int rc, nbr, j1, j2;// j1 → degat subit pour p1 
-    srand(time(NULL));
-    rc = calcule_rc(p1->combat_skill, p2->combat_skill) //les Habilités
-    while (p1->endurance > 0 && p2->endurance > 0){
-        nbr = rand() % 10;
+void combat(Player * p1, Player * p2)
+{
+    int rc, nbr, j1, j2; // j1 → degat subit pour p1 
+    rc = calcule_rc(p1->combat_skill, p2->combat_skill); //les Habilités
+    while (p1->endurance > 0 && p2->endurance > 0) {
+        nbr = generate_rnt();
         calcule_point(rc, nbr, &j1, &j2);
         p1->endurance -= j1;
         p2->endurance -= j2;

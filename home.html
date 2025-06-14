@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Discipline Choice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f0f0f0;
+        }
+        #game-output {
+            background-color: white;
+            padding: 15px;
+            border: 1px solid #ccc;
+            height: 200px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        #discipline-choices a {
+            display: block;
+            margin: 5px 0;
+            color: #007bff;
+            text-decoration: none;
+        }
+        #discipline-choices a:hover {
+            text-decoration: underline;
+        }
+        #discipline-choices a.disabled {
+            color: gray;
+            pointer-events: none;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+    <script src="game.js"></script>
+</head>
+<body>
+    <h1>Test de Sélection des Disciplines</h1>
+    <div id="game-output"></div>
+    <div id="discipline-choices">
+        <p>Choisissez une discipline (6 au total) :</p>
+        <a href="#" onclick="chooseDiscipline(1)">1- Camouflage</a>
+        <a href="#" onclick="chooseDiscipline(2)">2- Hunting</a>
+        <a href="#" onclick="chooseDiscipline(3)">3- Sixth Sense</a>
+        <a href="#" onclick="chooseDiscipline(4)">4- Tracking</a>
+        <a href="#" onclick="chooseDiscipline(5)">5- Weaponskill</a>
+        <a href="#" onclick="chooseDiscipline(6)">6- Healing</a>
+        <a href="#" onclick="chooseDiscipline(7)">7- Mindshield</a>
+        <a href="#" onclick="chooseDiscipline(8)">8- Mindblast</a>
+        <a href="#" onclick="chooseDiscipline(9)">9- Animal Kinship</a>
+        <a href="#" onclick="chooseDiscipline(10)">10- Mind Over Matter</a>
+    </div>
+    <button id="next-step" style="display: none;" onclick="nextStep()">Passer à l’étape suivante</button>
+
+    <script>
+        let playerPtr = null;
+
+        // Afficher les messages dans le DOM
+        function updateDisplay(message) {
+            const output = document.getElementById('game-output');
+            output.innerText += message + '\n';
+            output.scrollTop = output.scrollHeight; // Auto-scroll
+        }
+
+        // Désactiver les choix quand terminé
+        function onDisciplinesComplete() {
+            const choices = document.getElementById('discipline-choices');
+            choices.querySelectorAll('a').forEach(link => {
+                link.classList.add('disabled');
+            });
+            document.getElementById('next-step').style.display = 'block';
+        }
+
+        // Simuler l’étape suivante
+        function nextStep() {
+            updateDisplay('Vous passez à l’étape suivante de l’aventure !');
+            document.getElementById('next-step').style.display = 'none';
+        }
+
+        // Gérer le choix de discipline
+        function chooseDiscipline(choice) {
+            if (playerPtr) {
+                Module._discipline_choice(playerPtr, choice);
+            } else {
+                updateDisplay('Erreur : Joueur non initialisé.');
+            }
+        }
+
+        // Initialiser le jeu
+        Module.onRuntimeInitialized = () => {
+            // Créer le joueur
+            playerPtr = Module._player_generator('Lone Wolf');
+            updateDisplay('Joueur créé : Lone Wolf');
+            updateDisplay('Choisissez vos disciplines ci-dessous.');
+        };
+    </script>
+</body>
+</html>

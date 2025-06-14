@@ -52,6 +52,14 @@ typedef enum {
 } Special_items;
 
 typedef struct {
+    int gold;
+    int meals;
+    int potions_healing;
+    int arrows;
+    Bool special_items[7];
+} Resources;
+
+typedef struct {
     char name[32];
     int endurance;
     int endurance_max;
@@ -61,29 +69,22 @@ typedef struct {
     Bool tab_weapon[10];
     int nbr_weapon;
     int weaponskill_weapon;
-    struct Resources bag;
+    Resources bag;
     Bool combat;
 } Player;
-
-typedef struct Resources {
-    int gold;
-    int meals;
-    int potions_healing;
-    int arrows;
-    Bool special_items[7];
-} Resources;
 
 int generate_rnt();
 
 Player * player_generator(char name[256]);
 void weapon_choice(Player * p1);
 void discipline_choice(Player * p1);
+// void discipline_choice(Player * p1, int choice);
 
-void eating(Player * p1);
-void healing(Player * p1);
+void eat(Player * p1);
+void heal(Player * p1);
 
 void calcule_point(int rc, int nbr_rand, int * hero, int * enemi);
 int calcule_rc(int hab_hero, int hab_enemi);
-void combat(Player * p1,Player * p2);
+void combat(Player * p1, Player * p2);
 
 #endif
