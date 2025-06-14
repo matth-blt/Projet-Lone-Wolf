@@ -21,8 +21,9 @@ Bool discipline_choice()
 // Dans un fichier (RC Tir Degats Ennemi Degats Heros)
 
 
-void calcule_point(int rc, int nbr_rand, int* hero,int* enemi){
-    FILE * file = fopen("tab.txt", "r");
+void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
+{
+    FILE * file = fopen("./ressources/tab.txt", "r");
     
     if (file == NULL) {
         printf("Unable to open file <tab.txt>\n"), exit(EXIT_FAILURE);
@@ -42,10 +43,9 @@ void calcule_point(int rc, int nbr_rand, int* hero,int* enemi){
                 return;
             }
         }
-
     }
 
-    *hero=0;
-    *enemi=0;
+    *hero = 0;
+    *enemi = 0;
     fclose(file);
 }
