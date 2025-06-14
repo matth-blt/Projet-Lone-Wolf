@@ -41,9 +41,20 @@ typedef enum {
     bow
 } Weapons;
 
+typedef enum {
+    ticket,
+    seal_of_hammerdal,
+    magic_spear,
+    crystal_star_pendant,
+    red_pass,
+    white_pass,
+    documents
+} Special_items;
+
 typedef struct {
     char name[32];
     int endurance;
+    int endurance_max;
     int combat_skill;
     Bool tab_discipline[10];
     int nbr_discipline;
@@ -59,6 +70,7 @@ typedef struct Resources {
     int meals;
     int potions_healing;
     int arrows;
+    Bool special_items[7];
 } Resources;
 
 int generate_rnt();

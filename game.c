@@ -9,6 +9,7 @@ Player * player_generator(char name[256])
     
     p1->combat_skill = generate_rnt() + 10; // 10-19
     p1->endurance = generate_rnt() + 20; // 20-29
+    p1->endurance_max = p1->endurance;
     
     p1->nbr_weapon = 0;
     memset(p1->tab_weapon, 0, sizeof(p1->tab_weapon));
@@ -18,6 +19,7 @@ Player * player_generator(char name[256])
     memset(p1->tab_discipline, 0, sizeof(p1->tab_discipline));
     discipline_choice(p1);
 
+    memset(&p1->bag, 0, sizeof(p1->bag));
     p1->bag.gold = generate_rnt() + 10;
     
     return p1;
@@ -91,10 +93,8 @@ void discipline_choice(Player * p1)
             if (choice == weaponskill) {
                 p1->weaponskill_weapon = generate_rnt();
                 printf("[Le Bonus s'appliquera a l'arme : %s]\n\n", weapon_names[p1->weaponskill_weapon]);
-                if (p1->tab_weapon[p1->weaponskill_weapon] == true) {
-                    printf("[Arme Possédé +2 en habilité]\n\n");
-                    p1->combat_skill += 2;
-                }
+                if (p1->tab_weapon[p1->weaponskill_weapon] == true)
+                    printf("[Arme Possédé, +2 en habilité en combat si équipé]\n\n");
             }
         } else {
             printf("------------------------------------\n"
@@ -126,15 +126,25 @@ void eating(Player * p1)
 
 void healing(Player * p1)
 {
-    if (p1->in_combat == true) {
+    if (p1->in_combat == false) {
         if (p1->bag.potions_healing > 0) {
+            if (p1->endurance == p1->endurance_max) {
+                printf("[Endurance déjà au Max !]\n\n");
+                return;
+            }
             p1->bag.potions_healing--;
             p1->endurance += 4;
+            if (p1->endurance > p1->endurance_max) {
+                p1->endurance = p1->endurance_max;
+                printf("[Endurance au Max !]\n\n");
+            }
         } else {
             printf("[Pas assez de Potions !]\n\n");
+            return;
         }
     } else {
         printf("[Vous ne pouvez pas vous heal pendant un combat !]\n\n");
+        return;
     }
 }
 
