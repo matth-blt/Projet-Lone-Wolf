@@ -6,25 +6,66 @@ Player * player_generator(char name[256])
 {
     Player * p1 = malloc(sizeof(Player));
     strcpy(p1->name, name);
-    p1->hability = generate_rnt() + 10; // 10-19
+    
+    p1->combat_skill = generate_rnt() + 10; // 10-19
     p1->endurance = generate_rnt() + 20; // 20-29
+    
+    p1->nbr_weapon = 0;
+    memset(p1->tab_weapon, 0, sizeof(p1->tab_weapon));
+    weapon_choice(p1);
+    
     p1->nbr_discipline = 0;
     memset(p1->tab_discipline, 0, sizeof(p1->tab_discipline));
     discipline_choice(p1);
+    
     return p1;
+}
+
+void weapon_choice(Player * p1)
+{
+    Weapons choice;
+    while (1) {
+        printf("-------------------PLAYER--------------------\n"
+           "Choisi 6 Disciplines parmi les 10 suivantes :\n\n"
+           "1- Dagger\n"
+           "2- Spear\n"
+           "3- Mace\n"
+           "4- Short Sword\n"
+           "5- Warhammer\n"
+           "6- Sword\n"
+           "7- Axe\n"
+           "8- Quarterstaff\n"
+           "9- Broadsword\n"
+           "10- Bow\n"
+           "\nNombre Arme(s) Possédé : %d\n"
+        "---------------------------------------------\n"
+        "--> ", p1->nbr_weapon);
+        scanf("%d", (int *)&choice), choice--;
+        getchar();
+        system("cls");
+        if (choice >= 0 && choice < 10 && p1->tab_weapon[choice] == false) {
+            p1->tab_weapon[choice] = true;
+            p1->nbr_weapon++;
+            break;
+        } else {
+            printf("------------------------------------\n"
+                   "| Choix invalide ou déjà possédé ! |\n"
+                   "------------------------------------\n\n");
+        }
+    }
 }
 
 void discipline_choice(Player * p1)
 {
     Disciplines choice;
-    char *weapon_names[10] = {"Dagger", "Spear", 
+    char * weapon_names[10] = {"Dagger", "Spear", 
                               "Mace", "Short Sword", 
                               "Warhammer", "Sword", 
                               "Axe", "Quarterstaff",
                               "Broadsword", "Bow"};
 
     while (p1->nbr_discipline != 6) {
-        printf("-------------------CHOICE--------------------\n"
+        printf("-------------------PLAYER--------------------\n"
            "Choisi 6 Disciplines parmi les 10 suivantes :\n\n"
            "1- Camouflage\n"
            "2- Hunting\n"
@@ -48,11 +89,15 @@ void discipline_choice(Player * p1)
             if (choice == weaponskill) {
                 p1->weaponskill_weapon = generate_rnt();
                 printf("[Le Bonus s'appliquera a l'arme : %s]\n\n", weapon_names[p1->weaponskill_weapon]);
+                if (p1->tab_weapon[p1->weaponskill_weapon] == true) {
+                    printf("[Arme Possédé +2 en habilité]\n\n");
+                    p1->combat_skill = p1->combat_skill + 2;
+                }
             }
         } else {
-            printf("----------------------------------------\n"
-                   "| Choix invalide ou déjà selectionné ! |\n"
-                   "----------------------------------------\n\n");
+            printf("------------------------------------\n"
+                   "| Choix invalide ou déjà possédé ! |\n"
+                   "------------------------------------\n\n");
         }
     }
 }

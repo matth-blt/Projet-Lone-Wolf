@@ -25,9 +25,13 @@ int main(int argc, char *argv[])
     }
     if (found != 2) printf("Manque des commandes !"), exit(1);
 
-    printf("nom : %s\n"
-           "habilité : %d\n"
-           "endurance : %d\n", p1->name, p1->hability, p1->endurance);
+    printf("Nom : %s\n"
+           "Habilité : %d\n"
+           "Endurance : %d\n", p1->name, p1->combat_skill, p1->endurance);
+    for (int i = 0 ; i < 10 ; i++) {
+        printf("{%d} ", (int)p1->tab_weapon[i]);
+    }
+    printf("\n\n");
     for (int i = 0 ; i < 10 ; i++) {
         printf("{%d} ", (int)p1->tab_discipline[i]);
     }

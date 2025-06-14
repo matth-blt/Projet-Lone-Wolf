@@ -40,15 +40,17 @@ typedef enum {
 typedef struct {
     char name[32];
     int endurance;
-    int hability;
+    int combat_skill;
     Bool tab_discipline[10];
     int nbr_discipline;
     Bool tab_weapon[10];
+    int nbr_weapon;
     int weaponskill_weapon;
 } Player;
 
 int generate_rnt();
 Player * player_generator(char name[256]);
+void weapon_choice(Player * p1);
 void discipline_choice(Player * p1);
 void calcule_point(int rc, int nbr_rand, int * hero, int * enemi);
 
