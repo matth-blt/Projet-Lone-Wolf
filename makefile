@@ -36,7 +36,7 @@ $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 web:
 	$(RM) .\export\*.html
-	$(RUN) --file ./ressources/02fotw.data
+	$(RUN) --file ./ressources/02fotw.data --name "LE GOAT DES ECHECS"
 hsup:
 	$(RM) .\export\*.html
 clean:

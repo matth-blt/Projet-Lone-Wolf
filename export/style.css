@@ -1,50 +1,50 @@
   
-    :root {
-      --primary-color: #e89b00 ;
-      --bg-color: #000 ;
-      --secondary-color: #282828 ;
-      --text-color: #d7d7d7 ;
-    }
+:root {
+  --primary-color: #e89b00 ;
+  --bg-color: #000 ;
+  --secondary-color: #282828 ;
+  --text-color: #d7d7d7 ;
+}
 
-    * {
-      font-family: 'Times New Roman', 'serif';
-      text-decoration: none ;
-      margin-top: 1rem ;
-      color: var(--text-color) ;
-      font-size: 20px;
-    }
+* {
+  font-family: 'Times New Roman', 'serif';
+  text-decoration: none ;
+  margin-top: 1rem ;
+  color: var(--text-color) ;
+  font-size: 20px;
+}
 
-    body {
-      background-color: var(--bg-color);
-    }
+body {
+  background-color: var(--bg-color);
+}
 
-    section {
-      max-width: 70% ;
-      margin: 0 auto ;
-    }
+section {
+  max-width: 70% ;
+  margin: 0 auto ;
+}
       
-    h1 {
-        font-size: 36px ;
-        font-weight: 900 ;
-        margin: 0 ;
-        text-align: center ;
-        color: var(--primary-color) ;
-    }
+h1 {
+  font-size: 36px ;
+  font-weight: 900 ;
+  margin: 0 ;
+  text-align: center ;
+  color: var(--primary-color) ;
+}
 
-    p {
-      text-align: justify ;
-    }
+p {
+  text-align: justify ;
+}
 
-    a {
-      color:var(--primary-color) ;
-    }
+a {
+  color:var(--primary-color) ;
+}
 
-    .content {
-      background-color: var(--secondary-color);
-      padding: 2rem;
-      border-radius: 15px;
-    }
+.content {
+  background-color: var(--secondary-color);
+  padding: 2rem;
+  border-radius: 15px;
+}
 
-  .inline, .float {
-    text-align: center;
-  }
+.inline, .float {
+  text-align: center;
+}
