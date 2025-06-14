@@ -17,6 +17,8 @@ Player * player_generator(char name[256])
     p1->nbr_discipline = 0;
     memset(p1->tab_discipline, 0, sizeof(p1->tab_discipline));
     discipline_choice(p1);
+
+    p1->bag.gold = generate_rnt() + 10;
     
     return p1;
 }
@@ -91,7 +93,7 @@ void discipline_choice(Player * p1)
                 printf("[Le Bonus s'appliquera a l'arme : %s]\n\n", weapon_names[p1->weaponskill_weapon]);
                 if (p1->tab_weapon[p1->weaponskill_weapon] == true) {
                     printf("[Arme Possédé +2 en habilité]\n\n");
-                    p1->combat_skill = p1->combat_skill + 2;
+                    p1->combat_skill += 2;
                 }
             }
         } else {
@@ -102,11 +104,44 @@ void discipline_choice(Player * p1)
     }
 }
 
+void gain_gold(Player * p1, int amount)
+{
+    p1->bag.gold += amount;
+    if (p1->bag.gold > GOLD_MAX) { 
+        p1->bag.gold = GOLD_MAX;
+        printf("[Votre Gold est au Max !]\n\n");
+    }
+}
+
+void eating(Player * p1)
+{
+    if (p1->tab_discipline[hunting] == true) {
+        printf("Pas besoin de manger");
+    } else if (p1->bag.meals > 0) {
+        p1->bag.meals--;
+    } else {
+        p1->endurance -= 3;
+    }
+}
+
+void healing(Player * p1)
+{
+    if (p1->in_combat == true) {
+        if (p1->bag.potions_healing > 0) {
+            p1->bag.potions_healing--;
+            p1->endurance += 4;
+        } else {
+            printf("[Pas assez de Potions !]\n\n");
+        }
+    } else {
+        printf("[Vous ne pouvez pas vous heal pendant un combat !]\n\n");
+    }
+}
+
 // RC = ton HC – HC de l’ennemi (limites le RC entre –11 et +11 s’il dépasse)
 // La table de combat
 // Boucle jusqu’à ce que l’un des deux meure
 // Dans un fichier (RC Tir Degats Ennemi Degats Heros)
-
 
 void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
 {
