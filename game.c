@@ -165,8 +165,6 @@ void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
     int rc_tab, nbr_rand_tab, hero_tmp, enemi_tmp;
 
     while (fgets(line, sizeof(line), file)) {
-        sscanf(line, "%d %d %d %d", &rc_tab, &nbr_rand_tab, hero, enemi);
-
         if (sscanf(line, "%d %d %d %d", &rc_tab, &nbr_rand_tab, &enemi_tmp, &hero_tmp) == 4) {
             if (rc == rc_tab && nbr_rand == nbr_rand_tab) {
                 *hero = hero_tmp;
