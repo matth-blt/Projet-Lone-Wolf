@@ -1,38 +1,23 @@
 #include "game.h"
-#include <emscripten.h>
 
-// ------------------------------------------------------------------
-
-void update_display(char msg[128])
-{
-    char script[256];
-    sprintf(script, "updateDisplay('%s')", msg);
-    emscripten_run_script(script);
-}
-
-// ------------------------------------------------------------------
-
-void init_random() { srand(time(NULL)); }
 int generate_rnt() { return rand() % 10; }
-
-// ------------------------------------------------------------------
 
 Player * player_generator(char name[256]) 
 {
     Player * p1 = malloc(sizeof(Player));
     strcpy(p1->name, name);
     
-    p1->combat_skill = generate_rnt() + 10;
-    p1->endurance = generate_rnt() + 20;
+    p1->combat_skill = generate_rnt() + 10; // 10-19
+    p1->endurance = generate_rnt() + 20; // 20-29
     p1->endurance_max = p1->endurance;
     
-    print_player_attribut(p1);
-
     p1->nbr_weapon = 0;
     memset(p1->tab_weapon, 0, sizeof(p1->tab_weapon));
+    weapon_choice(p1);
     
     p1->nbr_discipline = 0;
     memset(p1->tab_discipline, 0, sizeof(p1->tab_discipline));
+    discipline_choice(p1);
 
     memset(&p1->bag, 0, sizeof(p1->bag));
     p1->bag.gold = generate_rnt() + 10;
@@ -40,102 +25,98 @@ Player * player_generator(char name[256])
     return p1;
 }
 
-// ------------------------------------------------------------------
-
-void print_player_attribut(Player * p1)
+void weapon_choice(Player * p1)
 {
-    char combat_skill_print[128];
-    sprintf(combat_skill_print, "Combat Skill : %d", p1->combat_skill);
-    update_display(combat_skill_print);
-
-    char endurance_skill_print[128];
-    sprintf(endurance_skill_print, "Endurance : %d -> Endurance Max : %d", p1->endurance, p1->endurance_max);
-    update_display(endurance_skill_print);
-}
-
-// ------------------------------------------------------------------
-
-void weapon_choice(Player * p1, int choice) 
-{
-    char * weapon_names[10] = {"Dagger", "Spear", "Mace", "Short Sword", 
-                              "Warhammer", "Sword", "Axe", "Quarterstaff",
-                              "Broadsword", "Bow"};
-    if (choice >= 0 && choice < 10 && p1->tab_weapon[choice] == false) {
-        p1->tab_weapon[choice] = true;
-        p1->nbr_weapon++;
-
-        char msg[128];
-        sprintf(msg, "Arme %s ajoutée. Total : %d/2", weapon_names[choice], p1->nbr_weapon);
-
-        char script[256];
-        sprintf(script, "updateDisplay('%s')", msg);
-        emscripten_run_script(script);
-    } else {
-        emscripten_run_script("updateDisplay('Choix invalide ou déjà possédé !')");
+    Weapons choice;
+    while (1) {
+        printf("-------------------PLAYER--------------------\n"
+           "Choisi 6 Disciplines parmi les 10 suivantes :\n\n"
+           "1- Dagger\n"
+           "2- Spear\n"
+           "3- Mace\n"
+           "4- Short Sword\n"
+           "5- Warhammer\n"
+           "6- Sword\n"
+           "7- Axe\n"
+           "8- Quarterstaff\n"
+           "9- Broadsword\n"
+           "10- Bow\n"
+           "\nNombre Arme(s) Possédé : %d\n"
+        "---------------------------------------------\n"
+        "--> ", p1->nbr_weapon);
+        scanf("%d", (int *)&choice), choice--;
+        getchar();
+        system("cls");
+        if (choice >= 0 && choice < 10 && p1->tab_weapon[choice] == false) {
+            p1->tab_weapon[choice] = true;
+            p1->nbr_weapon++;
+            break;
+        } else {
+            printf("------------------------------------\n"
+                   "| Choix invalide ou déjà possédé ! |\n"
+                   "------------------------------------\n\n");
+        }
     }
 }
 
-// ------------------------------------------------------------------
-
-void discipline_choice(Player * p1, int choice)
+void discipline_choice(Player * p1)
 {
-    char * weapon_names[10] = {"Dagger", "Spear", "Mace", "Short Sword", 
-                              "Warhammer", "Sword", "Axe", "Quarterstaff",
+    Disciplines choice;
+    char * weapon_names[10] = {"Dagger", "Spear", 
+                              "Mace", "Short Sword", 
+                              "Warhammer", "Sword", 
+                              "Axe", "Quarterstaff",
                               "Broadsword", "Bow"};
-    
-    choice--;
-    if (p1->nbr_discipline >= 6) {
-        emscripten_run_script("updateDisplay('Vous avez déjà choisi 6 disciplines.')");
-        return;
-    }
-    
-    if (choice >= 0 && choice < 10 && p1->tab_discipline[choice] == false) {
-        p1->tab_discipline[choice] = true;
-        p1->nbr_discipline++;
-        char msg[256];
-        sprintf(msg, "Discipline %d ajoutée. Total : %d/6", choice + 1, p1->nbr_discipline);
 
-        char script[256];
-        sprintf(script, "updateDisplay('%s')", msg);
-        emscripten_run_script_string(script);
-
-        
-        if (choice == weaponskill) {
-            p1->weaponskill_weapon = generate_rnt();
-            sprintf(msg, "[Le Bonus s'appliquera à l'arme : %s]", weapon_names[p1->weaponskill_weapon]);
-            char script2[256];
-            sprintf(script2, "updateDisplay('%s')", msg);
-            emscripten_run_script_string(script2);
-            if (p1->tab_weapon[p1->weaponskill_weapon]) {
-                emscripten_run_script("updateDisplay('[Arme Possédée, +2 en habilité en combat si équipé]')");
+    while (p1->nbr_discipline != 6) {
+        printf("-------------------PLAYER--------------------\n"
+           "Choisi 6 Disciplines parmi les 10 suivantes :\n\n"
+           "1- Camouflage\n"
+           "2- Hunting\n"
+           "3- Sixth Sense\n"
+           "4- Tracking\n"
+           "5- Weaponskill\n"
+           "6- Healing\n"
+           "7- Mindshield\n"
+           "8- Mindblast\n"
+           "9- Animal Kinship\n"
+           "10- Mind Over Matter\n"
+           "\nNombre Discipline(s) Possédé : %d\n"
+        "---------------------------------------------\n"
+        "--> ", p1->nbr_discipline);
+        scanf("%d", (int *)&choice), choice--;// ?
+        getchar();
+        system("cls");
+        if (choice >= 0 && choice < 10 && p1->tab_discipline[choice] == false) {
+            p1->tab_discipline[choice] = true;
+            p1->nbr_discipline++;
+            if (choice == weaponskill) {
+                p1->weaponskill_weapon = generate_rnt();
+                printf("[Le Bonus s'appliquera a l'arme : %s]\n\n", weapon_names[p1->weaponskill_weapon]);
+                if (p1->tab_weapon[p1->weaponskill_weapon] == true)
+                    printf("[Arme Possédé, +2 en habilité en combat si équipé]\n\n");
             }
+        } else {
+            printf("------------------------------------\n"
+                   "| Choix invalide ou déjà possédé ! |\n"
+                   "------------------------------------\n\n");
         }
-        
-        if (p1->nbr_discipline == 6) {
-            emscripten_run_script("onDisciplinesComplete()");
-        }
-    } else {
-        emscripten_run_script("updateDisplay('Choix invalide ou déjà possédé !')");
     }
 }
-
-// ------------------------------------------------------------------
 
 void gain_gold(Player * p1, int amount)
 {
     p1->bag.gold += amount;
     if (p1->bag.gold > GOLD_MAX) { 
         p1->bag.gold = GOLD_MAX;
-        emscripten_run_script("updateDisplay('[Votre Gold est au Max !]')");
+        printf("[Votre Gold est au Max !]\n\n");
     }
 }
-
-// ------------------------------------------------------------------
 
 void eat(Player * p1)
 {
     if (p1->tab_discipline[hunting] == true) {
-        emscripten_run_script("updateDisplay('[Pas besoin de manger, car vous avez la discipline hunting]')");
+        printf("Pas besoin de manger");
         return;
     } else if (p1->bag.meals > 0) {
         p1->bag.meals--;
@@ -144,33 +125,34 @@ void eat(Player * p1)
     }
 }
 
-// ------------------------------------------------------------------
-
 void heal(Player * p1)
 {
     if (p1->combat == false) {
         if (p1->bag.potions_healing > 0) {
             if (p1->endurance == p1->endurance_max) {
-                emscripten_run_script("updateDisplay('[Endurance déjà au Max !]')");
+                printf("[Endurance déjà au Max !]\n\n");
                 return;
             }
             p1->bag.potions_healing--;
             p1->endurance += 4;
             if (p1->endurance > p1->endurance_max) {
                 p1->endurance = p1->endurance_max;
-                emscripten_run_script("updateDisplay('[Endurance au Max !]')");
+                printf("[Endurance au Max !]\n\n");
             }
         } else {
-            emscripten_run_script("updateDisplay('[Pas assez de Potions !]')");
+            printf("[Pas assez de Potions !]\n\n");
             return;
         }
     } else {
-        emscripten_run_script("updateDisplay('[Vous ne pouvez pas vous heal pendant un combat !]')");
+        printf("[Vous ne pouvez pas vous heal pendant un combat !]\n\n");
         return;
     }
 }
 
-// ------------------------------------------------------------------
+// RC = ton HC – HC de l’ennemi (limites le RC entre –11 et +11 s’il dépasse)
+// La table de combat
+// Boucle jusqu’à ce que l’un des deux meure
+// Dans un fichier (RC Tir Degats Ennemi Degats Heros)
 
 void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
 {
@@ -199,8 +181,6 @@ void calcule_point(int rc, int nbr_rand, int * hero, int * enemi)
     fclose(file);
 }
 
-// ------------------------------------------------------------------
-
 int calcule_rc(int hab_hero, int hab_enemi)
 {
     int rc = hab_hero - hab_enemi;
@@ -210,8 +190,6 @@ int calcule_rc(int hab_hero, int hab_enemi)
         rc = 11;
         return rc;
 }
-
-// ------------------------------------------------------------------
 
 void combat(Player * p1, Player * p2)
 {
