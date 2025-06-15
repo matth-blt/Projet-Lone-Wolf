@@ -15,8 +15,9 @@ CC = gcc
 CFLAGS = -Wall
 LDFLAGS = -lm
 
-SRC = main.c export_html.c game.c
+SRC = main.c export_html.c
 OBJ = $(SRC:.c=.o)
+GAME = game.data game.js game.wasm
 
 ifeq ($(OS_DETECTED),windows)
     EXE = projet.exe
@@ -36,10 +37,10 @@ $(EXE): $(OBJ)
 	$(CC) $(CFLAGS) -c $< -o $@
 web:
 	$(RM) .\export\*.html
-	$(RUN) --file ./ressources/02fotw.data --name "LE GOAT DES ECHECS"
+	$(RUN) --file ./ressources/02fotw.data
 hsup:
 	$(RM) .\export\*.html
 clean:
-	$(RM) $(OBJ) $(EXE)
+	$(RM) $(OBJ) $(EXE) $(GAME) .\export\*.html
 
 .PHONY: all web hsup clean

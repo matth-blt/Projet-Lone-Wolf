@@ -22,26 +22,26 @@ function showStep(stepId)
 
 // ------------------------------------------------------------------
 
-function saveAllHTMLFiles() {
-    const files = FS.readdir('/export');
+// function saveAllHTMLFiles() {
+//     const files = FS.readdir('/export');
 
-    for (const name of files) {
-        if (name.endsWith('.html')) {
-            try {
-                const content = FS.readFile(`/export/${name}`, { encoding: 'utf8' });
-                const blob = new Blob([content], { type: 'text/html' });
-                const link = document.createElement('a');
-                link.href = URL.createObjectURL(blob);
-                link.download = name;
-                document.body.appendChild(link); // Nécessaire sur Firefox
-                link.click();
-                document.body.removeChild(link);
-            } catch (e) {
-                console.error("Erreur lors de la lecture de", name, e);
-            }
-        }
-    }
-}
+//     for (const name of files) {
+//         if (name.endsWith('.html')) {
+//             try {
+//                 const content = FS.readFile(`/export/${name}`, { encoding: 'utf8' });
+//                 const blob = new Blob([content], { type: 'text/html' });
+//                 const link = document.createElement('a');
+//                 link.href = URL.createObjectURL(blob);
+//                 link.download = name;
+//                 document.body.appendChild(link); // Nécessaire sur Firefox
+//                 link.click();
+//                 document.body.removeChild(link);
+//             } catch (e) {
+//                 console.error("Erreur lors de la lecture de", name, e);
+//             }
+//         }
+//     }
+// }
 
 // ------------------------------------------------------------------
 
@@ -133,15 +133,7 @@ function nextStep()
     updateDisplay("L'aventure commence !");
     // Rediriger vers la 1ère section, ou autre action
     // window.location.href = "sect1.html"; // Ex. si généré
-    Module._start_section();
+    window.location.href = "export/sect1.html";
 }
 
 // ------------------------------------------------------------------
-
-// Module.onRuntimeInitialized = () => {
-//     Module.ccall('start_section'); // ou '_start_section' si pas renommé
-//     // Ajoute un petit délai pour être sûr que tous les fichiers sont générés
-//     setTimeout(() => {
-//         saveAllHTMLFiles();
-//     }, 1000);
-// };
