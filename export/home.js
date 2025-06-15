@@ -58,7 +58,10 @@ function createPlayer()
     const namePtr = Module._malloc(256);
     Module.stringToUTF8(name, namePtr, 256);
 
+    Module._init_random();
+
     playerPtr = Module._player_generator(namePtr);
+    sessionStorage.setItem('playerPtr', playerPtr);
     Module._free(namePtr);
 
     updateDisplay(`Joueur créé : ${name}`);

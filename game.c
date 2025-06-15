@@ -132,13 +132,19 @@ void gain_gold(Player * p1, int amount)
 
 // ------------------------------------------------------------------
 
-void eat(Player * p1)
+void eat(Player * p1, Bool choice)
 {
     if (p1->tab_discipline[hunting] == true) {
-        emscripten_run_script("updateDisplay('[Pas besoin de manger, car vous avez la discipline hunting]')");
+        // emscripten_run_script("updateDisplay('[Pas besoin de manger, car vous avez la discipline hunting]')");
+        printf("[Pas besoin de manger, car vous avez la discipline hunting]");
         return;
-    } else if (p1->bag.meals > 0) {
-        p1->bag.meals--;
+    } else if (choice == true) {
+        if (p1->bag.meals > 0) {
+            p1->bag.meals--;
+        } else {
+            printf("[Pas assez de nourriture !]");
+            p1->endurance -= 3;
+        }
     } else {
         p1->endurance -= 3;
     }

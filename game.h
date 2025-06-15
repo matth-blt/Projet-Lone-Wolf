@@ -91,7 +91,7 @@ void print_player_attribut(Player * p1);
 
 // --------------------------------------------------
 
-void eat(Player * p1);
+void eat(Player * p1, Bool choice);
 void heal(Player * p1);
 
 // --------------------------------------------------
