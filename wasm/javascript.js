@@ -1,3 +1,5 @@
+let playerPtr = Number(sessionStorage.getItem('playerPtr')) || null;
+
 document.addEventListener("DOMContentLoaded", () => {
   let section = document.querySelector("section");
 
@@ -114,3 +116,102 @@ function printPictures()
 		}
 	}) ;
 } 
+
+// --------------------------------------------------------------
+
+function checkForMealChoice()
+{
+    const paragraphs = document.querySelectorAll('p');
+    let hasMealChoice = false;
+    let mealParagraph = null;
+
+    paragraphs.forEach(p => {
+        const text = p.textContent.toLowerCase();
+        if (text.includes('eat') && text.includes('meal') && text.includes('endurance')) {
+            hasMealChoice = true;
+            mealParagraph = p;
+        }
+    });
+
+    if (hasMealChoice && mealParagraph) {
+        const mealInterface = document.createElement('div');
+        mealInterface.id = 'meal-interface';
+        mealInterface.innerHTML = `
+            <button id="eat-meal">Manger un repas</button>
+            <button id="skip-meal">Ne pas manger</button>
+            <p id="meal-message" style="color: red;"></p>
+        `;
+
+        const parent = mealParagraph.parentElement;
+
+        let nextSibling = mealParagraph.nextElementSibling;
+        while (nextSibling && !nextSibling.querySelector('a[href*="sect"]')) {
+            nextSibling = nextSibling.nextElementSibling;
+        }
+
+        if (nextSibling) {
+            parent.insertBefore(mealInterface, nextSibling);
+        } else {
+            parent.appendChild(mealInterface);
+        }
+
+        const narrativeLinks = document.querySelectorAll('a[href*="sect"]');
+        narrativeLinks.forEach(link => {
+            link.style.pointerEvents = 'none';
+            link.style.opacity = '0.5';
+        });
+
+        document.getElementById('eat-meal').addEventListener('click', handleEatMeal);
+        document.getElementById('skip-meal').addEventListener('click', handleSkipMeal);
+    }
+
+    return hasMealChoice;
+}
+
+let wasmReady = false;
+
+Module.onRuntimeInitialized = () => {
+    wasmReady = true;
+};
+
+function handleEatMeal() 
+{
+	if (!playerPtr) {
+    	console.error("playerPtr non initialisé!");
+    	return;
+  	} 
+    if (!wasmReady) {
+        console.warn("WebAssembly pas encore prêt !");
+        return;
+    }
+  
+  	Module._eat(playerPtr, 1);
+    enableNarrativeLinks();
+}
+
+function handleSkipMeal() 
+{
+	if (!playerPtr) {
+    	console.error("playerPtr non initialisé!");
+    	return;
+  	}
+    if (!wasmReady) {
+        console.warn("WebAssembly pas encore prêt !");
+        return;
+    }
+  
+  	Module._eat(playerPtr, 0);
+    enableNarrativeLinks();
+}
+
+function enableNarrativeLinks() 
+{
+    const narrativeLinks = document.querySelectorAll('a[href*="sect"]');
+    narrativeLinks.forEach(link => {
+        link.style.pointerEvents = 'auto';
+        link.style.opacity = '1';
+    });
+    document.getElementById('meal-interface').remove();
+}
+
+// --------------------------------------------------------------

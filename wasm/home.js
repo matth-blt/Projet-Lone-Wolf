@@ -20,6 +20,19 @@ function showStep(stepId)
     });
 }
 
+
+function showSectionLoaded()
+{
+    ["step-name", "step-weapon", "step-disciplines", "game-output", "next-step"].forEach(id => {
+        const el = document.getElementById(id);
+        if(el) el.style.display = "none";
+    });
+
+    // afficher la section chargée dans game-content
+    const gameContent = document.getElementById("game-content");
+    if(gameContent) gameContent.style.display = "block";
+}
+
 // ------------------------------------------------------------------
 
 function createPlayer()
@@ -44,6 +57,7 @@ function createPlayer()
     updateDisplay(`Joueur créé : ${name}`);
     updateDisplay("Choisissez votre arme ci-dessous.");
     showStep("step-weapon");
+    // showStepOrSection("step-weapon");
 
     renderWeaponChoices();
 }
@@ -66,6 +80,7 @@ function renderWeaponChoices()
         link.onclick = () => {
         Module._weapon_choice(playerPtr, i);
         showStep("step-disciplines");
+        // showStepOrSection("step-disciplines");
         renderDisciplineChoices();
         };
         container.appendChild(link);
@@ -109,11 +124,37 @@ function onDisciplinesComplete()
 
 // ------------------------------------------------------------------
 
-function nextStep()
+function nextStep() 
 {
     updateDisplay("L'aventure commence !");
-    window.location.href = "export/sect1.html";
+    showSectionLoaded();
+    window.loadSection("sect1");
 }
+
+
+function loadCSS(href) {
+  // Évite d’ajouter plusieurs fois la même feuille
+    if (!document.querySelector(`link[href="${href}"]`)) {
+        const link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+    }
+}
+
+window.loadSection = function(sectionName)
+{
+    showSectionLoaded();
+
+    fetch(`export/${sectionName}.html`)
+        .then(res => res.text())
+        .then(html => {
+        document.getElementById("game-content").innerHTML = html;
+        // Charger CSS, etc.
+        loadCSS("export/style.css");
+        });
+};
+
 
 // ------------------------------------------------------------------
 

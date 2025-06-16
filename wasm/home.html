@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Test Discipline Choice</title>
+    <!-- <link rel="stylesheet" type="text/css" href="./export/style.css"> -->
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,7 +23,7 @@
         #discipline-choices a {
             display: block;
             margin: 5px 0;
-            color: #007bff;
+            color: #ff9900;
             text-decoration: none;
         }
         #discipline-choices a:hover {
@@ -46,33 +47,35 @@
     </style>
 </head>
 <body>
-  <h1>Création de personnage</h1>
+    <!-- <h1>Création de personnage</h1> -->
+    <div id="game-output"></div>
 
-  <div id="game-output"></div>
+    <!-- Étape 1 : nom du joueur -->
+    <div id="step-name">
+        <label for="playerName">Nom du personnage :</label>
+        <input type="text" id="playerName" placeholder="Entrez votre nom" />
+        <button onclick="createPlayer()">OK</button>
+    </div>
 
-  <!-- Étape 1 : nom du joueur -->
-  <div id="step-name">
-    <label for="playerName">Nom du personnage :</label>
-    <input type="text" id="playerName" placeholder="Entrez votre nom" />
-    <button onclick="createPlayer()">OK</button>
-  </div>
+    <!-- Étape 2 : choix de l’arme -->
+    <div id="step-weapon" style="display: none;">
+        <p>Choisissez une arme :</p>
+        <div id="weapon-choices"></div>
+    </div>
 
-  <!-- Étape 2 : choix de l’arme -->
-  <div id="step-weapon" style="display: none;">
-    <p>Choisissez une arme :</p>
-    <div id="weapon-choices"></div>
-  </div>
+    <!-- Étape 3 : choix des disciplines -->
+    <div id="step-disciplines" style="display: none;">
+        <p>Choisissez 6 disciplines :</p>
+        <div id="discipline-choices"></div>
+    </div>
 
-  <!-- Étape 3 : choix des disciplines -->
-  <div id="step-disciplines" style="display: none;">
-    <p>Choisissez 6 disciplines :</p>
-    <div id="discipline-choices"></div>
-  </div>
+    <button id="next-step" style="display: none;" onclick="loadSection('sect1')">Passer à l’étape suivante</button>
 
-  <button id="next-step" style="display: none;" onclick="nextStep()">Passer à l’étape suivante</button>
+    <div id="game-content" style="display:none;"></div>
 
-  <script src="game.js"></script>
-  <script src="./export/home.js"></script>
+    <script src="game.js"></script>
+    <script src="./export/home.js"></script>
+    <!-- <script src="./export/javascript.js"></script> -->
 
 </body>
 </html>
