@@ -6,8 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let textNode = section.firstChild;
   let number = textNode.textContent.match(/\d+/)[0];
 
-  let header = document.createElement("header");
-  header.appendChild(document.createElement("div"));
+  let header = createHeader() ;
 
   let content = document.createElement("div");
   content.className = "content";
@@ -42,8 +41,29 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+function createHeader() {
+  let header = document.createElement("header");
+
+  let headerDiv = document.createElement("div");
+
+  let title = document.createElement("p");
+  title.textContent = "Fire on the Water";
+
+  let authors = document.createElement("p");
+  authors.textContent = "Joe Dever and Gary Chalk";
+
+  headerDiv.appendChild(title);
+  headerDiv.appendChild(authors);
+
+  header.appendChild(headerDiv);
+
+  return header;
+}
+
+
 function moveFooter(section) {
   let footer = document.createElement("footer") ;
+  footer.classList.add("footer");
 
   let footElements = section.querySelectorAll('[id*="-foot"]') ;
 
