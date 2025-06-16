@@ -97,10 +97,6 @@ function renderDisciplineChoices()
             link.onclick = null;
 
             disciplinesChosen++;
-            // if (disciplinesChosen === MAX_DISCIPLINES) {
-            //     updateDisplay("Choix terminé. Prêt à débuter l’aventure !");
-            //     document.getElementById("next-step").style.display = "inline-block";
-            // }
         };
         container.appendChild(link);
     });
