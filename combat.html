@@ -5,7 +5,7 @@
     <title>Combat</title>
     <style>
         :root {
-            --primary-color: #e89b00 ;
+            --primary-color: #e4a934 ;
             --secondary-color: #282828 ;
             --third-color: #8b8b8b ;
             --fourth-color: #edcb88 ;
@@ -28,10 +28,9 @@
             font-weight: 500;
         }
 
-        .container {
+        .content {
             background-color: var(--secondary-color);
             padding: 2rem;
-            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         /* HEADER */
@@ -66,33 +65,67 @@
             margin-top: 0.8rem;
         }
 
-        #game-output {
-            background-color: var(--third-color);
-            color: var(--fifth-color);
+        .container {
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+        }
+
+        .terminal-container {
+            height: 250px;
+            display: flex;
+            border-radius: 15px;
+            margin: 2rem 0 2rem ;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-bar {
+            width: 80px;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 15px;
-            border: 2px solid var(--text-color);
-            height: 200px;
-            overflow-y: auto;
-            margin: 0 auto 2rem auto;
-            width: 95%;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+        }
+
+        .prompt {
+            color: var(--text-color);
+            font-size: 20px;
+        }
+        
+        #game-output {
+            scrollbar-width: none;
+            background-color: var(--fifth-color);
+            color: var(--third-color);
+            padding: 15px;
+            margin: 0 auto;
+            width: 100%;
             font-family: 'Courier New', Courier, monospace;
             font-size: 16px;
             transition: 0.5s ease;
             font-weight: 600;
-            border-radius: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
+            border-bottom-right-radius: 15px;
+            border-top-right-radius: 15px;
+            overflow-y: auto;
+            line-height: 1.4;
         }
 
-        #game-output:hover {
-            background-color: var(--text-color);
+        #game-output * {
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--third-color);
         }
 
         .load {
           font-size: 16px;
           margin: 2rem 0;
           background-color: #333;
-          padding: 1rem 2rem 2rem 2rem;
+          padding: 1rem 2rem;
           border-radius: 10px;
+          display: flex;
+          align-items: center;
+          gap: 1rem;
+          box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         button {
@@ -100,15 +133,37 @@
             background-color: var(--primary-color);
             color: var(--fifth-color);
             cursor: pointer;
-            border-radius: 15px;
+            border-radius: 17px;
             margin-left: 5px;
             border: none;
             font-weight: 600;
             transition: 0.5s ease;
         }
+        
         button:hover {
             background-color: var(--third-color);
             transform: scale(1.05);
+        }
+
+        .file-upload {
+            display: inline-block;
+            padding: 9px 35px;
+            background-color: var(--text-color);
+            color: var(--secondary-color);
+            cursor: pointer;
+            border-radius: 15px;
+            font-weight: 600;
+            transition: 0.5s ease;
+            font-size: 14px;
+        }
+
+        .file-upload:hover {
+            background-color: var(--third-color);
+            color: var(--fifth-color);
+        }
+
+        input[type="file"] {
+            display: none;
         }
 
         footer {
@@ -121,31 +176,46 @@
     </style>
 </head>
 <body>
+    <div class="container">
     <header>
         <div>
             <p>Fire on the Water</p>
             <p>Joe Dever and Gary Chalk</p>
         </div>
     </header>
-    <div class="container">
+    <div class="content">
 
       <p>FIGHT SECTION</p>
 
-      <div class="load">
-        <p>Load your file :</p>
+    <div class="load">
+        <p>Load your file (player stats) :</p>
+        <label for="jsonFile" class="file-upload">Choose file</label>
         <input type="file" id="jsonFile" accept=".json" />
-        <button onclick="loadFromStorage()">Load</button>
-      </div>
+        <!-- <button onclick="loadFromStorage()">Load</button> -->
+        <button id="loadBtn">Load</button>
+    </div>
 
-      <div id="game-output"></div>
+    <div class="terminal-container">
+        <div class="terminal-bar">
+            <span class="prompt">&gt;_</span>
+        </div>
+        <div id="game-output"></div>
+    </div>
       
-      <button id=" ">Redirect to</button>
+      <!-- <button id=" ">Redirect to</button> -->
+       <button id="redirectBtn" style="display: none;">Redirect to</button>
     </div>
 
 
     <footer class="footer"></footer>
+    </div>
     
-    <script>
+    <script type="module">
+        import Fight from './fight.js';
+        
+        let player = null; // Variable globale pour stocker le joueur
+        let enemies = [];  // Tableau pour stocker les ennemis de la page
+
         document.getElementById('jsonFile').addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (!file) return;
@@ -155,8 +225,9 @@
             reader.onload = function(e) {
                 try {
                     const content = e.target.result;
-                    const jsonData = JSON.parse(content);
-                    localStorage.setItem("player_autosave", JSON.stringify(jsonData));
+                    player = JSON.parse(content); // Stocke le joueur globalement
+                    localStorage.setItem("player_autosave", JSON.stringify(player));
+                    updateDisplay("Joueur chargé : " + player.name);
                 } catch (error) {
                     alert("Erreur lors de la lecture du fichier JSON : " + error.message);
                 }
@@ -165,13 +236,110 @@
             reader.readAsText(file);
         });
 
+        function executeCombat() {
+            const saved = localStorage.getItem("player_autosave");
+            const output = document.getElementById('game-output');
+            
+            if (!saved) {
+                output.innerHTML = "Aucune donnée joueur trouvée!";
+                return;
+            }
+            
+            // Charger le joueur UNE SEULE FOIS
+            let player = JSON.parse(saved);
+            const enemiesJSON = localStorage.getItem('combatEnemies');
+            const nextPage = localStorage.getItem('combatNextPage');
+            
+            if (!enemiesJSON) {
+                output.innerHTML = "Aucun combat préparé!";
+                return;
+            }
+            
+            const enemies = JSON.parse(enemiesJSON);
+            let combatLog = "<div class='terminal-line'>=== COMBAT START ===</div>";
+            
+            // Boucle sur les ennemis, mais on garde la même instance de player
+            enemies.forEach(enemy => {
+                combatLog += `<div class='terminal-line'>Enemy: ${enemy.name} | CS: ${enemy.combatSkill} | END: ${enemy.endurance}</div>`;
+                
+                const rc = Fight.calculeRc(player.combatSkill, enemy.combatSkill);
+                let round = 1;
+                let enemyEndurance = enemy.endurance; // On ne modifie pas l'objet original
+                const MAX_ROUNDS = 100; // sécurité anti-boucle infinie
+                
+                while (player.endurance > 0 && enemyEndurance > 0 && round <= MAX_ROUNDS) {
+                    const nbr = Fight.generateRnt();
+                    const damages = Fight.calculePoint(rc, nbr);
+                    
+                    player.endurance = Math.max(0, player.endurance - damages.hero);
+                    enemyEndurance = Math.max(0, enemyEndurance - damages.enemi);
+                    
+                    combatLog += `<div class='terminal-line'>Round ${round}: RC=${rc}, RNT=${nbr}, You -${damages.hero} | ${enemy.name} -${damages.enemi}</div>`;
+                    round++;
+                }
+                
+                if (round > MAX_ROUNDS) {
+                    combatLog += `<div class='terminal-line danger'>Combat interrompu (boucle infinie détectée) !</div>`;
+                } else if (player.endurance <= 0) {
+                    combatLog += `<div class='terminal-line danger'>YOU ARE DEFEATED BY ${enemy.name}!</div>`;
+                } else {
+                    combatLog += `<div class='terminal-line success'>${enemy.name} DEFEATED! Remaining END: ${player.endurance}</div>`;
+                }
+            });
+            
+            output.innerHTML = combatLog;
+            localStorage.setItem("player_autosave", JSON.stringify(player));
+            const redirectBtn = document.getElementById('redirectBtn');
+                
+            if (player.endurance <= 0) {
+                redirectBtn.textContent = "Game Over - Restart";
+                redirectBtn.onclick = () => window.location.href = './home.html';
+            } else {
+                const match = nextPage ? nextPage.match(/sect(\d+)/) : null;
+                const number = match ? match[1] : "???";
+                redirectBtn.textContent = `Continue to ${number}`;
+                redirectBtn.onclick = () => window.location.href = nextPage;
+            }
+                
+            redirectBtn.style.display = "block";
+        }
+
         function loadFromStorage() {
             const saved = localStorage.getItem("player_autosave");
             if (!saved) {
                 alert("Aucune donnée trouvée dans localStorage.");
                 return;
-            };
+            }
+            // player = JSON.parse(saved);
+            updateDisplay("Joueur chargé depuis la mémoire : " + player.name);
+            executeCombat();
         }
+        document.getElementById('loadBtn').addEventListener('click', loadFromStorage);
+
+        function updateDisplay(message) {
+            const output = document.getElementById("game-output");
+            output.innerHTML += `<div class="terminal-line">${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        // Fonction pour récupérer les ennemis de la page et les stocker
+        function loadEnemiesFromPage() {
+            enemies = [];
+            const enemyNames = document.querySelectorAll('span.enemy');
+            const enemySkills = document.querySelectorAll('span.combatskill');
+            const enemyEndurances = document.querySelectorAll('span.endurance');
+            for (let i = 0; i < enemyNames.length; i++) {
+                enemies.push({
+                    name: enemyNames[i].textContent.trim(),
+                    combatSkill: parseInt(enemySkills[i].textContent.trim(), 10),
+                    endurance: parseInt(enemyEndurances[i].textContent.trim(), 10),
+                    index: i
+                });
+            }
+        }        
+        document.getElementById('redirectBtn').addEventListener('click', function() {
+            window.location.href = "page_suivante.html";
+        });
     </script>
     <script type="module" src="./fight.js"></script>
     <script type="module" src="./addons.js"></script>

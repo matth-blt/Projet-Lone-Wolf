@@ -82,7 +82,7 @@ class Fight {
         let hasCombat = false;
         paragraphs.forEach(p => {
             if (p.classList.contains("combat") ) {
-                hasCombat=true;
+                hasCombat = true;
             }
         })
         return hasCombat;
@@ -97,40 +97,40 @@ class Fight {
         return enemy;
     }
 
-    static combat() {
-        let saveData = localStorage.getItem("player_autosave");
+    static prepareCombat() {
+        const combatLinks = document.querySelectorAll('a');
+        combatLinks.forEach(link => {
+            // Ajoute une détection si la page contient un combat
+            const hasCombat = document.querySelector('p.combat');
+            const parentText = link.parentElement.textContent.toLowerCase();
+            if (
+                parentText.includes('kill') ||
+                parentText.includes('combat') ||
+                parentText.includes('endurance') ||
+                hasCombat // Ajout : si la page contient un combat, TOUS les liens sont valides
+            ) {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    localStorage.setItem('combatNextPage', link.href);
 
-        if (saveData) {
-            // Parse en objet JS
-            let player = JSON.parse(saveData);
-        
+                    // Stocker les informations sur les ennemis
+                    const enemies = [];
+                    const combatElements = document.querySelectorAll('p.combat');
+                    combatElements.forEach(p => {
+                        const name = p.querySelector('.enemy')?.textContent.trim() || "Unknown";
+                        const skillText = p.querySelector('.combatskill')?.textContent.trim() || "0";
+                        const enduText = p.querySelector('.endurance')?.textContent.trim() || "0";
+                        const combatSkill = parseInt(skillText.match(/\d+/)?.[0] || "0", 10);
+                        const endurance = parseInt(enduText.match(/\d+/)?.[0] || "0", 10);
+                        enemies.push({ name, combatSkill, endurance });
+                    });
 
-            if (this.page_combat() == true) {
-                let nbr_combat = document.querySelectorAll("span.enemy").length;
-                for (let i = 0; i < nbr_combat; i++) {
-                    let enemy = this.infot(i);
-                    if (!enemy) continue;
-
-                    const rc = this.calculeRc(player.combatSkill, enemy.combatSkill);
-                    
-                    while (player.endurance > 0 && enemy.endurance > 0) {
-                        const nbr = this.generateRnt();
-                        const damages = this.calculePoint(rc, nbr);
-                            
-                        player.endurance -= damages.hero;
-                        enemy.endurance -= damages.enemi;
-                    }
-                    console.log(`${enemy.name} a été vaincu. Endurance du héros : ${player.endurance}`);
-                }
-                
+                    localStorage.setItem('combatEnemies', JSON.stringify(enemies));
+                    window.location.href = '../combat.html';
+                });
             }
-            
-            // Ré-enregistrer dans localStorage
-            localStorage.setItem("player_autosave", JSON.stringify(player));
-
-        }
+        });
     }
-
     static infot(i) {
         const enemies = document.querySelectorAll('span.enemy');
         const skills = document.querySelectorAll('span.combatskill');
@@ -148,6 +148,12 @@ class Fight {
             return enemy;
         }
 
-        return null; // Aucun ennemi valide trouvé
+        return null;
     }
 }
+
+export default Fight;
+
+document.addEventListener("DOMContentLoaded", () => {
+    Fight.prepareCombat() ;
+});

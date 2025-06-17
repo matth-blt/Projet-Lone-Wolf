@@ -33,7 +33,10 @@ export function readJSON(namefile) {
 
 function saveJSON(namefile, player) {
     localStorage.setItem(namefile, JSON.stringify(player));
-    Game.saveToFile(player, "player_autosave.json");
+    console.log("Sauvegarde localStorage :", localStorage.getItem(namefile));
+    // Game.saveToFile(player, "player_autosave.json");
+    // const data = JSON.stringify(player);
+    // localStorage.setItem(namefile, data);
 }
 
 class Addons {
@@ -50,20 +53,56 @@ class Addons {
     }
 
     static eat(player, choice) {
-        if (player.disciplines[Game.Disciplines.HUNTING]) {
-            return "[No need to eat, you have the Hunter discipline !]";
-        } 
-        if (choice == true) {
+
+        if (player?.disciplines?.[Game.Disciplines.HUNTING]) {
+        return "[No need to eat, you have the Hunter discipline !]";
+        }
+
+        let message = "";
+
+        if (choice === true) {
             if (player.bag.meals > 0) {
                 player.bag.meals--;
-                saveJSON("player_autosave", player);
-                return "[-1 Food]";
+                message = "[-1 Food]";
+            } else {
+                player.endurance -= 3;
+                message = "[-3 Endurance]";
             }
         } else {
             player.endurance -= 3;
-            saveJSON("player_autosave", player);
-            return "[-3 Endurance]";
+            message = "[-3 Endurance]";
         }
+
+        localStorage.setItem("player_autosave", JSON.stringify(player));
+        console.log("Sauvegarde localStorage :", localStorage.getItem("player_autosave"));
+        return message;
+        
+        // if (player?.disciplines?.[Game.Disciplines.HUNTING]) {
+        // return "[No need to eat, you have the Hunter discipline !]";
+        // }
+
+        // // let message = null;
+        // if (choice === true) {
+        //     if (player.bag.meals > 0) {
+        //         player.bag.meals--;
+        //         // message = "[-1 Food]";
+        //         console.log("[-1 Food]");
+        //     } else {
+        //         player.endurance -= 3;
+        //         // message = "[-3 Endurance]";
+        //         console.log("[-3 Endurance]");
+        //     }
+        // } else {
+        //     player.endurance -= 3;
+        //     // message = "[-3 Endurance]";
+        //     console.log("[-3 Endurance]");
+        // }
+            
+        
+
+        // // localStorage.setItem("player_autosave", JSON.stringify(player));
+        // saveJSON("player_autosave", player);
+        // return message;
     }
 
     static heal(player) {
@@ -91,50 +130,51 @@ class Addons {
 export default Addons;
 
 export function importPlayer() {
-    // return new Promise((resolve, reject) => {
-    //     const fileInput = document.createElement('input');
-    //     fileInput.type = 'file';
-    //     fileInput.accept = '.json';
-    //     fileInput.style.display = 'none';
-    //     document.body.appendChild(fileInput);
-
-    //     fileInput.onchange = (event) => {
-    //         const file = event.target.files[0];
-    //         if (!file) {
-    //             reject("Aucun fichier sélectionné");
-    //             return;
-    //         }
-
-    //         const reader = new FileReader();
-    //         reader.onload = (e) => {
-    //             try {
-    //                 const player = JSON.parse(e.target.result);
-    //                 saveJSON("player_autosave", player);
-    //                 resolve(player);
-    //             } catch (error) {
-    //                 reject("Erreur de parsing JSON");
-    //             }
-    //             document.body.removeChild(fileInput);
-    //         };
-    //         reader.onerror = () => {
-    //             reject("Erreur de lecture");
-    //             document.body.removeChild(fileInput);
-    //         };
-    //         reader.readAsText(file);
-    //     };
-
-    //     fileInput.click();
-    // });
-
-    const elements = document.querySelectorAll('[class^="sect"]');
+    
+    const elements = document.querySelectorAll('section[id^="sect"]');
     const newinput = document.createElement('input');
     const newbutton = document.createElement('button');
 
     newinput.id = 'jsonFile';
-    newinput.type = '.json';
-    newinput.setAttribute('.json');
+    newinput.type = 'file';
+    newinput.accept = '.json';
+    
+    newbutton.textContent='Load';
 
-    newbutton.
+    elements[0].appendChild(newinput);
+    elements[0].appendChild(newbutton);
+
+    newinput.addEventListener('change', function(event) {
+    const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            try {
+                const content = e.target.result;
+                const jsonData = JSON.parse(content);
+                localStorage.setItem("player_autosave", JSON.stringify(jsonData));
+            } catch (error) {
+                alert("Erreur lors de la lecture du fichier JSON : " + error.message);
+            }
+        };
+        reader.readAsText(file);
+    });
+
+    newbutton.addEventListener('click', () => {
+        loadFromStorage();
+    });
+
+
+}
+
+function loadFromStorage() {
+    const saved = localStorage.getItem("player_autosave");
+    if (!saved) {
+        alert("Aucune donnée trouvée dans localStorage.");
+        return;
+    };
+    checkForMealChoice();
 }
 
 function checkForMealChoice() {
@@ -208,11 +248,18 @@ async function handleEatMeal() {
         if (!player) {
             player = await importPlayer();
         }
-        Addons.eat(player, true);
+        const result = Addons.eat(player, true);
+        console.log(result);
+
+        // Recharge l'objet joueur après modification
+        player = readJSON("player_autosave");
+        console.log("Vérification joueur modifié :", player);
+
         enableNarrativeLinks();
     } catch (error) {
         console.error("Meal error:", error);
     }
+
 }
 
 async function handleSkipMeal() {
@@ -221,13 +268,22 @@ async function handleSkipMeal() {
         if (!player) {
             player = await importPlayer();
         }
-        Addons.eat(player, false);
+        Addons.eat(player,false);
+
+        // Recharge l'objet joueur après modification
+        player = readJSON("player_autosave");
+        console.log("Vérification joueur modifié :", player);
+
         enableNarrativeLinks();
     } catch (error) {
         console.error("Meal error:", error);
     }
+
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    checkForMealChoice() ;
+    
+    if (checkForMealChoice()) {
+        importPlayer();
+    }
 });

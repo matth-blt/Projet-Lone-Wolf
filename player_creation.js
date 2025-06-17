@@ -217,6 +217,7 @@ function createPlayer() {
 
     player = Game.playerGenerator(name);
     updateDisplay(`Player : ${name}`);
+    updateDisplay(`Endurance/Endurance Max : ${player.endurance} | Combat Skill : ${player.combatSkill}`);
     updateDisplay("Choose your weapon below.");
     showStep("step-weapon");
     renderWeaponChoices();

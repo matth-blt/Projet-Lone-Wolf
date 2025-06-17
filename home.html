@@ -5,7 +5,7 @@
     <title>Création de personnage</title>
     <style>
         :root {
-            --primary-color: #e89b00 ;
+            --primary-color: #e4a934 ;
             --secondary-color: #282828 ;
             --third-color: #8b8b8b ;
             --fourth-color: #edcb88 ;
@@ -28,10 +28,9 @@
             font-weight: 500;
         }
 
-        .container {
+        .content {
             background-color: var(--secondary-color);
             padding: 2rem;
-            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
         }
 
         /* HEADER */
@@ -66,33 +65,58 @@
             margin-top: 0.8rem;
         }
 
-        #game-output {
-            background-color: var(--third-color);
-            color: var(--fifth-color);
+        .container {
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+        }
+
+        .terminal-container {
+            height: 250px;
+            display: flex;
+            border-radius: 15px;
+            margin: 2rem 0 2rem ;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .terminal-bar {
+            width: 80px;
+            background-color: #000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             padding: 15px;
-            border: 2px solid var(--text-color);
-            height: 200px;
-            overflow-y: auto;
-            margin: 0 auto 2rem auto;
-            width: 95%;
+            border-bottom-left-radius: 15px;
+            border-top-left-radius: 15px;
+        }
+
+        .prompt {
+            color: var(--text-color);
+            font-size: 20px;
+        }
+        
+        #game-output {
+            scrollbar-width: none;
+            background-color: var(--fifth-color);
+            color: var(--third-color);
+            padding: 15px;
+            margin: 0 auto;
+            width: 100%;
             font-family: 'Courier New', Courier, monospace;
             font-size: 16px;
             transition: 0.5s ease;
             font-weight: 600;
-            border-radius: 10px;
-            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.25);
-        }
-
-        #game-output:hover {
-            background-color: var(--text-color);
+            border-bottom-right-radius: 15px;
+            border-top-right-radius: 15px;
+            overflow-y: auto;  
+            line-height: 1.4;
         }
 
         #playerName {
             color: var(--fifth-color);
             font-size: 16px;
             margin-left: 20px;
-            padding: 3px 5px;
-            border-radius: 7px;
+            padding: 6px;
+            border-radius: 12px;
         }
 
         #weapon-choices, #discipline-choices {
@@ -155,16 +179,22 @@
     </style>
 </head>
 <body>
+    <div class="container">
     <header>
         <div>
             <p>Fire on the Water</p>
             <p>Joe Dever and Gary Chalk</p>
         </div>
     </header>
-    <div class="container">
+    <div class="content">
             
         <p>Character creation :</p>
-        <div id="game-output"></div>
+        <div class="terminal-container">
+            <div class="terminal-bar">
+                <span class="prompt">&gt;_</span>
+            </div>
+            <div id="game-output"></div>
+        </div>
 
         <!-- Étape 1 : nom du joueur -->
         <div id="step-name">
@@ -189,7 +219,8 @@
         <button id="next-step" style="display: none;">Start adventure</button>
     </div>
     <footer class="footer"></footer>
+    </div>
 
     <script type="module" src="player_creation.js"></script>
 </body>
-</html>
+</html> 
