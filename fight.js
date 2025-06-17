@@ -1,3 +1,5 @@
+import Addons from 'addons.js';
+
 class Fight {
     static combatTable = [
         // Format: [RC, RandomNumber, PlayerDamage, EnemyDamage]
@@ -98,17 +100,5 @@ class Fight {
             localStorage.setItem("playerSave_autosave", JSON.stringify(player));
 
         }
-    }
-
-    
-}
-
-importAddons();
-
-function importAddons() {
-    if (typeof Addons === 'undefined') {
-        const script = document.createElement('script');
-        script.src = 'addons.js';
-        document.head.appendChild(script);
     }
 }

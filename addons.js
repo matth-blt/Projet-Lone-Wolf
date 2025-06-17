@@ -44,3 +44,5 @@ class Addons {
         return "Pas assez de Potions !";
     }
 }
+
+export default Addons;
