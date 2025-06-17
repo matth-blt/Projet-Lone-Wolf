@@ -298,9 +298,33 @@ function refreshPlayerData() {
     // Mettez à jour l'affichage ici, si vous avez des champs visibles (points d'endurance, or, etc.)
 }
 
+async function updateServerWithPlayerData(player) {
+  try {
+    const response = await fetch('http://localhost:3000/update', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(player)
+    });
+    const result = await response.json();
+    if (response.ok) {
+      console.log("Données mises à jour sur le serveur :", result);
+    } else {
+      console.error("Erreur serveur :", result.error);
+    }
+  } catch (err) {
+    console.error("Erreur réseau :", err);
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     
     if (checkForMealChoice()) {
         importPlayer();
     }
 });
+
+// pour apres :
+// let player = readJSON("player_autosave");
+// // ... modifie player ...
+// localStorage.setItem("player_autosave", JSON.stringify(player));
+// updateServerWithPlayerData(player);
