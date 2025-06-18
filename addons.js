@@ -2,6 +2,12 @@ import Game from './player_creation.js';
 
 // -------------------------------------------------------------------
 
+/**
+ * Active tous les liens narratifs (liens vers des sections) et supprime l'interface de choix de repas
+ *
+ * Parcourt tous les <a> avec href contenant "sect", réactive leur clic
+ * et les reaffiche. Supprime ensuite l'élément "meal-interface"
+ */
 export function enableNarrativeLinks() {
     const narrativeLinks = document.querySelectorAll('a[href*="sect"]');
     narrativeLinks.forEach(link => {
@@ -11,6 +17,12 @@ export function enableNarrativeLinks() {
     document.getElementById('meal-interface').remove();
 }
 
+/**
+ * Lit et retourne un objet JSON (player) stocké dans le localStorage
+ *
+ * @param {string} namefile - Nom de la clé dans le localStorage (player_autosave)
+ * @returns {Object|null} - L'objet JSON parsé si trouvé, sinon null
+ */
 export function readJSON(namefile) {
     let player = null;
     let saveData = localStorage.getItem(namefile);
@@ -28,6 +40,12 @@ class Addons {
     static GOLD_MAX = 50;
     static RESOURCE_MAX = 8;
 
+    /**
+     * Ajoute de l'or au joueur, sans dépasser la limite maximale
+     * @param {Object} player
+     * @param {number} amount - Or à ajouter
+     * @returns {string|null} - Message si la limite est atteinte, sinon null
+     */
     static gainGold(player, amount) {
         player.bag.gold += amount;
         if (player.bag.gold > Addons.GOLD_MAX) {
@@ -37,6 +55,12 @@ class Addons {
         return null;
     }
 
+    /**
+     * Gère le choix de repas du joueur (manger ou perdre de l'endurance)
+     * @param {Object} player
+     * @param {boolean} choice - true si player eat, false si skip
+     * @returns {string} - Message du choix 
+     */
     static eat(player, choice) {
 
         if (player?.disciplines?.[Game.Disciplines.HUNTING]) {
@@ -61,6 +85,11 @@ class Addons {
         return message;
     }
 
+    /**
+     * Soigne le joueur s'il possède une potion de soin et n'est pas en combat
+     * @param {Object} player
+     * @returns {string|null} - Message d'erreur ou null
+     */
     static heal(player) {
         if (player.combat) {
             return "You can't heal during a fight !";
@@ -87,6 +116,11 @@ export default Addons;
 
 // -------------------------------------------------------------------
 
+/**
+ * Vérifie si un choix de repas doit être proposé et affiche l'interface si besoin
+ * Désactive les liens narratifs pendant le choix
+ * @returns {boolean} - true si un choix de repas a été détecté, sinon false
+ */
 function checkForMealChoice() {
     if (document.getElementById('meal-interface')) {
         return false;
@@ -201,6 +235,9 @@ function checkForMealChoice() {
     return hasMealChoice;
 }
 
+/**
+ * Gère le clic sur le bouton "EAT" : applique les effets, sauvegarde et réactive les liens
+ */
 async function handleEatMeal() {
      try {
         // lit données player dans localStorage
@@ -225,6 +262,9 @@ async function handleEatMeal() {
     }
 }
 
+/**
+ * Gère le clic sur le bouton "SKIP" : applique les effets, sauvegarde et réactive les liens
+ */
 async function handleSkipMeal() {
     try {
         let player = readJSON("player_autosave");
@@ -248,6 +288,9 @@ async function handleSkipMeal() {
 
 // -------------------------------------------------------------------
 
+/**
+ * Affiche dans la console les données actuelles du joueur (pour debug)
+ */
 function refreshPlayerData() {
     const player = readJSON("player_autosave");
     console.log("Joueur actuel :", player);
@@ -255,6 +298,10 @@ function refreshPlayerData() {
 
 // -------------------------------------------------------------------
 
+/**
+ * Met à jour les données du joueur sur le serveur via une requête POST
+ * @param {Object} player - L'objet joueur à envoyer
+ */
 async function updateServerWithPlayerData(player) {
   try {
     // Envoie une requête POST

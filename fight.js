@@ -65,6 +65,13 @@ class Fight {
     
 // ==== FONCTIONS DE COMBAT ====
 
+    /**
+     * Calcule les points de dommages pour le héros et l'ennemi à partir de la table de combat.
+     *
+     * @param {number} rc - Rapport de combat (différence entre les compétences).
+     * @param {number} nbrRand - Nombre aléatoire tiré pour ce round (0-9).
+     * @returns {{ hero: number, enemi: number }} - Dégâts infligés par le héros et l'ennemi.
+     */
     static calculePoint(rc, nbrRand) {
         // Cherche rc et nbrRand dans combatTable
         const entry = Fight.combatTable.find(
@@ -73,11 +80,24 @@ class Fight {
         return entry ? { hero: entry[3], enemi: entry[2] } : { hero: 0, enemi: 0 };
     }
 
+    /**
+     * Calcule le rapport de combat en limitant la valeur entre -11 et 11.
+     *
+     * @param {number} habHero - Combat Skill du héros.
+     * @param {number} habEnemi - Combat Skill  de l'ennemi.
+     * @returns {number} - Rapport de combat (RC) borné.
+     */
     static calculeRc(habHero, habEnemi) {
         let rc = habHero - habEnemi;
         return Math.max(-11, Math.min(11, rc));
     }
 
+    /**
+     * Prépare la page de combat :
+     * Recherche des paragraphes de combat.
+     * Remplace les liens de combat pour rediriger vers la page de combat dédiée.
+     * Sauvegarde les informations des ennemis dans localStorage.
+     */
     static prepareCombat() {
         const hasCombat = document.querySelector('p.combat');
         if (!hasCombat) return;

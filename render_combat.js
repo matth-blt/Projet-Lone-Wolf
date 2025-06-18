@@ -3,6 +3,10 @@ import Fight from './fight.js';
 let player = null;
 let enemies = [];
 
+/**
+ * Gestionnaire d'importation de fichier JSON contenant les données du joueur.
+ * Met à jour le localStorage avec le joueur importé.
+ */
 document.getElementById('jsonFile').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (!file) return;
@@ -23,6 +27,12 @@ document.getElementById('jsonFile').addEventListener('change', function(event) {
     reader.readAsText(file);
 });
 
+//-------------------------------------------------------------------------------------
+
+/**
+ * Exécute le combat en utilisant les données du joueur et des ennemis depuis le localStorage.
+ * Affiche le journal du combat et gère la redirection vers la page suivante ou la fin de jeu.
+ */
 function executeCombat() {
     const saved = localStorage.getItem("player_autosave");
     const output = document.getElementById('game-output');
@@ -89,6 +99,12 @@ function executeCombat() {
     redirectBtn.style.display = "block";
 }
 
+//-------------------------------------------------------------------------------------
+
+/**
+ * Charge les données du joueur depuis le localStorage
+ * et exécute automatiquement un combat.
+ */
 function loadFromStorage() {
     const saved = localStorage.getItem("player_autosave");
     if (!saved) {
@@ -100,11 +116,19 @@ function loadFromStorage() {
 }
 document.getElementById('loadBtn').addEventListener('click', loadFromStorage);
 
+//-------------------------------------------------------------------------------------
+
+/**
+ * Affiche un message dans l'interface, simulant un terminal.
+ * @param {string} message - Message à afficher.
+ */
 function updateDisplay(message) {
     const output = document.getElementById("game-output");
     output.innerHTML += `<div class="terminal-line">${message}</div>`;
     output.scrollTop = output.scrollHeight;
 }
+
+//-------------------------------------------------------------------------------------
 
 // Fonction pour récupérer les ennemis de la page et les stocker
 function loadEnemiesFromPage() {
@@ -121,6 +145,11 @@ function loadEnemiesFromPage() {
         });
     }
 }        
+
+/**
+ * Bouton de redirection visible après un combat.
+ * Il est mis à jour dynamiquement selon la situation.
+ */
 document.getElementById('redirectBtn').addEventListener('click', function() {
     window.location.href = "page_suivante.html";
 });

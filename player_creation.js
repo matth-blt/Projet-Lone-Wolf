@@ -6,12 +6,20 @@ const MAX_DISCIPLINES = 6;
 
 // ==== FONCTIONS UTILES ====
 
+/**
+ * Affiche un message dans le terminal du jeu.
+ * @param {string} message - Le message à afficher.
+ */
 export function updateDisplay(message) {
     const output = document.getElementById("game-output");
     output.innerText += message + "\n";
     output.scrollTop = output.scrollHeight;
 }
 
+/**
+ * Affiche uniquement l'étape spécifiée dans le processus de création du personnage.
+ * @param {string} stepId - L'ID de l'étape à afficher.
+ */
 function showStep(stepId) {
     ["step-name", "step-weapon", "step-disciplines"].forEach(id => {
         const element = document.getElementById(id);
@@ -77,8 +85,17 @@ class Game {
         DOCUMENTS: 6
     };
 
+    /**
+     * Génère un nombre aléatoire entre 0 et 9.
+     * @returns {number} Un nombre aléatoire.
+     */
     static generateRnt() { return Math.floor(Math.random() * 10); }
 
+    /**
+     * Crée un objet joueur à partir d'un nom.
+     * @param {string} name - Le nom du joueur.
+     * @returns {object} Un objet représentant le joueur.
+     */
     static playerGenerator(name) {
         const player = {
             name: name,
@@ -103,6 +120,12 @@ class Game {
         return player;
     }
 
+    /**
+     * Ajoute une arme à l'inventaire du joueur.
+     * @param {object} player - L'objet joueur.
+     * @param {number} weaponIndex - L'index de l'arme.
+     * @returns {boolean} True si l'arme est ajoutée avec succès.
+     */
     static chooseWeapon(player, weaponIndex) {
         if (player.nbrWeapon >= Game.WEAPON_MAX) return false;
         
@@ -114,6 +137,12 @@ class Game {
         return false;
     }
 
+    /**
+     * Ajoute une discipline au joueur.
+     * @param {object} player - L'objet joueur.
+     * @param {number} disciplineIndex - L'index de la discipline.
+     * @returns {boolean} True si la discipline est ajoutée avec succès.
+     */
     static chooseDiscipline(player, disciplineIndex) {
         if (player.nbrDiscipline >= 6) return false;
         
@@ -141,6 +170,12 @@ class Game {
         return false;
     }
 
+    /**
+     * Sauvegarde l'état du joueur dans le localStorage et dans un fichier JSON.
+     * @param {object} player - L'objet joueur à sauvegarder.
+     * @param {string} [saveName="autosave"] - Le nom de la sauvegarde.
+     * @returns {object} Les données sauvegardées.
+     */
     static savePlayer(player, saveName = "autosave") {
         const saveData = {
             name: player.name,
@@ -161,6 +196,11 @@ class Game {
         return saveData;
     }
 
+    /**
+     * Sauvegarde les données dans un fichier téléchargeable.
+     * @param {object} data - Les données à sauvegarder.
+     * @param {string} filename - Le nom du fichier.
+     */
     static saveToFile(data, filename) {
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         const url = URL.createObjectURL(blob);// URL temporaire Blob
@@ -177,7 +217,11 @@ class Game {
         URL.revokeObjectURL(url);
     }
 
-
+    /**
+     * Charge les données d'un joueur depuis le localStorage ou un fichier JSON.
+     * @param {string} [saveName="autosave"] - Le nom de la sauvegarde à charger.
+     * @returns {Promise<object|null>} Les données du joueur ou null en cas d'échec.
+     */
     static async loadPlayer(saveName = "autosave") {
         const saveData = localStorage.getItem(`playerSave_${saveName}`);
         if (saveData) return JSON.parse(saveData);
@@ -196,6 +240,10 @@ export default Game;
 // -------------------------------------------------------------------
 
 // ==== FONCTIONS DE CREATION DE PERSONNAGE ====
+
+/**
+ * Crée un nouveau joueur avec les informations saisies.
+ */
 function createPlayer() {
     const input = document.getElementById("playerName");
     const name = input.value.trim();
@@ -213,6 +261,9 @@ function createPlayer() {
     renderWeaponChoices();
 }
 
+/**
+ * Affiche les choix d'armes à sélectionner.
+ */
 function renderWeaponChoices() {
     const weapons = [
         "Dagger", "Spear", "Mace", "Short Sword", "Warhammer",
@@ -242,6 +293,9 @@ function renderWeaponChoices() {
     });
 }
 
+/**
+ * Affiche les disciplines disponibles à choisir.
+ */
 function renderDisciplineChoices() {
     const disciplines = [
         "Camouflage", "Hunting", "Sixth Sense", "Tracking", "Weaponskill",
@@ -286,6 +340,9 @@ function renderDisciplineChoices() {
     });
 }
 
+/**
+ * Passe à l'étape suivante après la création du personnage.
+ */
 function nextStep() {
     if (player) {
         // Sauvegarder le joueur avant de continuer
