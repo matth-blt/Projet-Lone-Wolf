@@ -82,9 +82,9 @@ class Game {
     static playerGenerator(name) {
         const player = {
             name: name,
-            endurance: Game.generateRnt() + 20,
+            endurance: Game.generateRnt() + 20,// 20-30
             enduranceMax: 0,
-            combatSkill: Game.generateRnt() + 10,
+            combatSkill: Game.generateRnt() + 10, // 10-20
             disciplines: new Array(10).fill(false),
             nbrDiscipline: 0,
             weapons: new Array(10).fill(false),
@@ -117,17 +117,20 @@ class Game {
     static chooseDiscipline(player, disciplineIndex) {
         if (player.nbrDiscipline >= 6) return false;
         
+        // vérification
         if (disciplineIndex >= 0 && disciplineIndex < 10 && !player.disciplines[disciplineIndex]) {
-            player.disciplines[disciplineIndex] = true;
+            player.disciplines[disciplineIndex] = true; // acquise
             player.nbrDiscipline++;
             
             if (disciplineIndex === Game.Disciplines.WEAPONSKILL) {
+                // Tire au hasard une arme
                 player.weaponskillWeapon = Game.generateRnt();
                 const weaponNames = [
                     "Dagger", "Spear", "Mace", "Short Sword", 
                     "Warhammer", "Sword", "Axe", "Quarterstaff",
                     "Broadsword", "Bow"
                 ];
+
                 updateDisplay(`[The bonus will apply to the weapon : ${weaponNames[player.weaponskillWeapon]}]`);
                 if (player.weapons[player.weaponskillWeapon]) {
                     updateDisplay("[Owned Weapon, +2 Combat Skill if equipped]");
@@ -173,6 +176,7 @@ class Game {
         // Libère l'URL temporaire
         URL.revokeObjectURL(url);
     }
+
 
     static async loadPlayer(saveName = "autosave") {
         const saveData = localStorage.getItem(`playerSave_${saveName}`);

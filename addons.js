@@ -257,6 +257,7 @@ function refreshPlayerData() {
 
 async function updateServerWithPlayerData(player) {
   try {
+    // Envoie une requête POST
     const response = await fetch('http://localhost:3000/update', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
@@ -265,6 +266,7 @@ async function updateServerWithPlayerData(player) {
         filename: "C:\\Users\\matth\\Downloads\\player_autosave.json"
       })
     });
+    // Attend la réponse du serveur
     const result = await response.json();
     if (response.ok) {
       console.log("Données mises à jour sur le serveur :", result);
