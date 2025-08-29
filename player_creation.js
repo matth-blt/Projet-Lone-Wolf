@@ -203,7 +203,7 @@ class Game {
      */
     static saveToFile(data, filename) {
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);// URL temporaire Blob
+        const url = URL.createObjectURL(blob);
 
         const a = document.createElement('a');
         a.href = url;
@@ -213,7 +213,6 @@ class Game {
         a.click();
         document.body.removeChild(a);
 
-        // Libère l'URL temporaire
         URL.revokeObjectURL(url);
     }
 

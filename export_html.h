@@ -39,7 +39,7 @@ void link(char * line);
 void html_verificator(char * line, int nbr_section);
 
 /**
- * @brief Modifie de mot dans une chaine de caractère
+ * @brief Modifie un mot dans une chaine de caractère
  *
  * @param line pointeur sur ligne de lecture
  * @param old_word chaine de caractère avec le mot a remplacer

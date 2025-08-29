@@ -2,7 +2,6 @@
 
 void start_section(char * filename)
 {
-
     FILE * file = fopen(filename, "r");
     if (file == NULL) {
         printf("Unable to open file <%s>\n", filename), exit(EXIT_FAILURE);
@@ -19,7 +18,6 @@ void start_section(char * filename)
         if (section != NULL) {
             end_section(write_file_html);
             sscanf(line, "<section>sect%d", &nbr_section);
-
             
             //Création du fichier HTML
             sprintf(file_html, "./export/sect%d.html", nbr_section);
@@ -148,7 +146,7 @@ void replace(char * line, char * old_word, char * new_word)
     // Pointeur a la fin du mot a remplacer (première occurence)
     char * position = strstr(line, old_word);
 
-    if (position == NULL) 
+    if (position == NULL)
         return;
 
     // Calcule la distance entre le début de la ligne et position

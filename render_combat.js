@@ -59,8 +59,8 @@ function executeCombat() {
                 
         const rc = Fight.calculeRc(player.combatSkill, enemy.combatSkill);
         let round = 1;
-        let enemyEndurance = enemy.endurance; // On ne modifie pas l'objet original
-        const MAX_ROUNDS = 100; // sécurité anti-boucle infinie
+        let enemyEndurance = enemy.endurance;
+        const MAX_ROUNDS = 100;
                 
         while (player.endurance > 0 && enemyEndurance > 0 && round <= MAX_ROUNDS) {
             const nbr = Fight.generateRnt();
