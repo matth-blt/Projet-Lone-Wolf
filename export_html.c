@@ -57,6 +57,7 @@ void end_section(FILE *write_file_html) {
         fprintf(write_file_html, "\t</section>\n\t<script src=\"javascript.js\"></script>\n"
                                  "\t<script type=\"module\" src=\"../fight.js\"></script>\n"
                                  "\t<script type=\"module\" src=\"../addons.js\"></script>\n"
+                                 "\t<script src=\"../stats_widget.js\"></script>\n"
                                  "\t</body>\n</html>\n");
         write_file_html = NULL;
     }
