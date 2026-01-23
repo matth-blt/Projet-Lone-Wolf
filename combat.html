@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Combat</title>
     <link rel="stylesheet" type="text/css" href="combat.css">
 </head>
+
 <body>
     <div class="container">
         <header>
@@ -15,30 +17,29 @@
         </header>
         <div class="content">
 
-        <p>FIGHT SECTION</p>
+            <p>FIGHT SECTION</p>
 
-        <div class="load">
-            <p>Load your file (player stats) :</p>
-            <label for="jsonFile" class="file-upload">Choose file</label>
-            <input type="file" id="jsonFile" accept=".json" />
-            <button id="loadBtn">Load</button>
-        </div>
-
-        <div class="terminal-container">
-            <div class="terminal-bar">
-                <span class="prompt">&gt;_</span>
+            <div class="load">
+                <p>Player stats loaded from memory</p>
+                <button id="loadBtn">Start Combat</button>
             </div>
-            <div id="game-output"></div>
-        </div>
-        <button id="redirectBtn" style="display: none;">Redirect to</button>
+
+            <div class="terminal-container">
+                <div class="terminal-bar">
+                    <span class="prompt">&gt;_</span>
+                </div>
+                <div id="game-output"></div>
+            </div>
+            <button id="redirectBtn" style="display: none;">Redirect to</button>
         </div>
 
 
         <footer class="footer"></footer>
     </div>
-    
+
     <script type="module" src="./render_combat.js"></script>
     <script type="module" src="./fight.js"></script>
     <script type="module" src="./addons.js"></script>
 </body>
+
 </html>

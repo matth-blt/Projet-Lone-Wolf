@@ -1,0 +1,17 @@
+# Version WASM abandonnée
+wasm/
+
+# Fichiers HTML générés par le compilateur C
+export/*.html
+
+# Fichiers de compilation
+*.o
+*.exe
+
+# Fichiers de sauvegarde JSON
+*.json
+!package.json
+!package-lock.json
+
+.vscode
+node_modules

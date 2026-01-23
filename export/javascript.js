@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let textNode = section.firstChild;
     let number = textNode.textContent.match(/\d+/)[0];
 
-    let header = createHeader() ;
+    let header = createHeader();
 
     let content = document.createElement("div");
     content.className = "content";
@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let footer = moveFooter(section);
 
     let otherChildren = Array.from(section.childNodes);
-        otherChildren.forEach(node => {
+    otherChildren.forEach(node => {
         content.appendChild(node);
     });
 
@@ -86,17 +86,17 @@ function createHeader() {
 
 //Fonction qui permet de déplacer les notes de bas de page dans le footer
 function moveFooter(section) {
-    let footer = document.createElement("footer") ;
+    let footer = document.createElement("footer");
     footer.classList.add("footer");
 
-    let footElements = section.querySelectorAll('[id*="-foot"]') ;
+    let footElements = section.querySelectorAll('[id*="-foot"]');
 
     footElements.forEach(el => {
-        let parentDiv = el.closest('div') ;
+        let parentDiv = el.closest('div');
         if (parentDiv) {
-            footer.appendChild(parentDiv) ;
+            footer.appendChild(parentDiv);
         }
-    }) ;
+    });
 
     let divFooter = footer.querySelector("div");
     if (divFooter) {
@@ -104,7 +104,7 @@ function moveFooter(section) {
         newParagraph.textContent = "NOTA BENE :";
         divFooter.prepend(newParagraph);
     }
-    return footer ;
+    return footer;
 }
 
 //Fonction qui permet de supprimer les paragraphes vides
@@ -118,20 +118,22 @@ function removeEmptyParagraphs() {
 
 //Fonction qui permet de récupérer les images et d'afficher uniquement celle en format png
 function printPictures() {
-	  let baseURL = "https://www.projectaon.org/en/xhtml/lw/02fotw/" ;
-	  let illustrations = document.querySelectorAll("div.float, div.inline") ;
+    // Images locales (téléchargées via download_images.py)
+    let baseURL = "../ressources/images/";
+    let illustrations = document.querySelectorAll("div.float, div.inline");
 
-	  illustrations.forEach(div => {
-		    let pictures = Array.from(div.getElementsByTagName("img")) ;
-		    let png = pictures.find(img => img.src.endsWith(".png")) ;
+    illustrations.forEach(div => {
+        let pictures = Array.from(div.getElementsByTagName("img"));
+        let png = pictures.find(img => img.src.endsWith(".png"));
 
-		    div.innerHTML = "" ;
-		    if (png) {
-		        png.src = baseURL + png.getAttribute("src") ;
-		        div.appendChild(png) ;
-		    }
-	  }) ;
-} 
+        div.innerHTML = "";
+        if (png) {
+            png.src = baseURL + png.getAttribute("src");
+            png.loading = "lazy";  // Lazy loading pour de meilleures perfs
+            div.appendChild(png);
+        }
+    });
+}
 
 //Fonction qui permet de créer une random table number 
 function randomNumberTable() {

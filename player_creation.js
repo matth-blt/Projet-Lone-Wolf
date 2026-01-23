@@ -2,8 +2,6 @@ let player = null;
 let disciplinesChosen = 0;
 const MAX_DISCIPLINES = 6;
 
-// -------------------------------------------------------------------
-
 // ==== FONCTIONS UTILES ====
 
 /**
@@ -29,21 +27,17 @@ function showStep(stepId) {
     });
 }
 
-// -------------------------------------------------------------------
-
-document.addEventListener("DOMContentLoaded", function() {
+document.addEventListener("DOMContentLoaded", function () {
     if (document.getElementById("step-name")) {
         const createBtn = document.getElementById("create-player-btn");
         if (createBtn) createBtn.addEventListener("click", createPlayer);
-        
+
         const nextBtn = document.getElementById("next-step");
         if (nextBtn) nextBtn.addEventListener("click", nextStep);
-        
+
         showStep("step-name");
     }
 });
-
-// -------------------------------------------------------------------
 
 // ==== CLASS GAME ====
 class Game {
@@ -128,7 +122,7 @@ class Game {
      */
     static chooseWeapon(player, weaponIndex) {
         if (player.nbrWeapon >= Game.WEAPON_MAX) return false;
-        
+
         if (weaponIndex >= 0 && weaponIndex < 10 && !player.weapons[weaponIndex]) {
             player.weapons[weaponIndex] = true;
             player.nbrWeapon++;
@@ -145,17 +139,17 @@ class Game {
      */
     static chooseDiscipline(player, disciplineIndex) {
         if (player.nbrDiscipline >= 6) return false;
-        
+
         // vérification
         if (disciplineIndex >= 0 && disciplineIndex < 10 && !player.disciplines[disciplineIndex]) {
             player.disciplines[disciplineIndex] = true; // acquise
             player.nbrDiscipline++;
-            
+
             if (disciplineIndex === Game.Disciplines.WEAPONSKILL) {
                 // Tire au hasard une arme
                 player.weaponskillWeapon = Game.generateRnt();
                 const weaponNames = [
-                    "Dagger", "Spear", "Mace", "Short Sword", 
+                    "Dagger", "Spear", "Mace", "Short Sword",
                     "Warhammer", "Sword", "Axe", "Quarterstaff",
                     "Broadsword", "Bow"
                 ];
@@ -190,53 +184,29 @@ class Game {
 
         // Sauvegarde dans localStorage
         localStorage.setItem(`player_${saveName}`, JSON.stringify(saveData));
-        
-        this.saveToFile(saveData, "player_autosave.json");
-        
+
         return saveData;
     }
 
     /**
-     * Sauvegarde les données dans un fichier téléchargeable.
-     * @param {object} data - Les données à sauvegarder.
-     * @param {string} filename - Le nom du fichier.
-     */
-    static saveToFile(data, filename) {
-        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-        const url = URL.createObjectURL(blob);
-
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = filename;
-
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-
-        URL.revokeObjectURL(url);
-    }
-
-    /**
-     * Charge les données d'un joueur depuis le localStorage ou un fichier JSON.
+     * Charge les données d'un joueur depuis le localStorage.
      * @param {string} [saveName="autosave"] - Le nom de la sauvegarde à charger.
-     * @returns {Promise<object|null>} Les données du joueur ou null en cas d'échec.
+     * @returns {object|null} Les données du joueur ou null si non trouvé.
      */
-    static async loadPlayer(saveName = "autosave") {
-        const saveData = localStorage.getItem(`playerSave_${saveName}`);
-        if (saveData) return JSON.parse(saveData);
-
-        try {
-            const response = await fetch("ressources/player.json");
-            return response.ok ? await response.json() : null;
-        } catch (e) {
-            return null;
+    static loadPlayer(saveName = "autosave") {
+        const saveData = localStorage.getItem(`player_${saveName}`);
+        if (saveData) {
+            try {
+                return JSON.parse(saveData);
+            } catch (e) {
+                return null;
+            }
         }
+        return null;
     }
 }
 
 export default Game;
-
-// -------------------------------------------------------------------
 
 // ==== FONCTIONS DE CREATION DE PERSONNAGE ====
 
@@ -278,7 +248,7 @@ function renderWeaponChoices() {
         link.onclick = () => {
             if (Game.chooseWeapon(player, i)) {
                 updateDisplay(`Weapon chosen : ${weapon}`);
-                
+
                 // Passer aux disciplines après avoir choisi 2 armes
                 if (player.nbrWeapon == 1) {
                     showStep("step-disciplines");
@@ -307,7 +277,7 @@ function renderDisciplineChoices() {
         const link = document.createElement("a");
         link.href = "#";
         link.innerText = `${discipline}`;
-        
+
         // Désactiver visuellement les disciplines déjà choisies
         if (player.disciplines[i]) {
             link.classList.add("disabled");
@@ -319,7 +289,7 @@ function renderDisciplineChoices() {
                 updateDisplay("You have already chosen 6 disciplines !");
                 return;
             }
-            
+
             if (Game.chooseDiscipline(player, i)) {
                 updateDisplay(`Discipline chosen : ${discipline}`);
                 link.classList.add("disabled");
@@ -345,9 +315,9 @@ function renderDisciplineChoices() {
 function nextStep() {
     if (player) {
         // Sauvegarder le joueur avant de continuer
-        Game.savePlayer(player, "current");
+        Game.savePlayer(player, "autosave");
         updateDisplay("The adventure begins ! Redirecting...");
-        
+
         // Redirection vers la page de l'aventure
         setTimeout(() => {
             window.location.href = "./export/sect1.html";
@@ -356,5 +326,3 @@ function nextStep() {
         updateDisplay("Please create your character first");
     }
 }
-
-// -------------------------------------------------------------------

@@ -1,7 +1,6 @@
 #include "export_html.h"
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
     char filename[256];
 
     if (argc > 3) {

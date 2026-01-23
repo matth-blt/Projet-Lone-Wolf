@@ -1,0 +1,24 @@
+{
+  "name": "projet-fin-annee",
+  "version": "1.5.0",
+  "description": "Fire on the Water - Interactive Gamebook",
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matth-blt/Projet-Fin-Annee.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matth-blt/Projet-Fin-Annee/issues"
+  },
+  "homepage": "https://github.com/matth-blt/Projet-Fin-Annee#readme",
+  "devDependencies": {
+    "vitest": "^4.0.18"
+  }
+}
