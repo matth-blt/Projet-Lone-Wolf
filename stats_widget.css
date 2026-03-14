@@ -1,0 +1,182 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
+
+:root {
+    --primary-color: #e4a934 ;
+    --secondary-color: #282828 ;
+    --third-color: #8b8b8b ;
+    --fourth-color: #edcb88 ;
+    --fifth-color: #131313 ;
+    --text-color: #d7d7d7 ;
+}
+
+#stats-panel, #stats-panel * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif ;
+}
+
+#stats-toggle {
+    position: fixed ;
+    bottom: 20px ;
+    right: 20px ;
+    width: 50px ;
+    height: 50px ;
+    border-radius: 50% ;
+    background: var(--secondary-color) ;
+    border: none ;
+    font-size: 50px ;
+    padding: 15px ;
+    color: var(--text-color) ;
+    cursor: pointer ;
+    box-shadow: 1px 1px 10px var(--secondary-color) ;
+    transition: ease 0.3s ;
+    z-index: 100 ;
+    display: flex ;
+    align-items: center ;
+    justify-content: center ;
+}
+
+#stats-toggle:hover {
+    transform: scale(1.1) ;
+    box-shadow: 1px 1px 10px var(--secondary-color) ;
+}
+
+#stats-panel {
+    position: fixed ;
+    bottom: 80px ;
+    right: 20px ;
+    width: 300px ;
+    background: linear-gradient(var(--secondary-color), var(--fifth-color)) ;
+    border: none ;
+    border-radius: 12px ;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5) ;
+    opacity: 0 ;
+    transform: translateY(20px) scale(0.9) ;
+    transition: opacity 0.3s, transform 0.3s ;
+    pointer-events: none ;
+    z-index: 99 ;
+    overflow: hidden ;
+}
+
+#stats-panel.visible {
+    opacity: 1 ;
+    transform: scale(1) ;
+}
+
+.stats-header {
+    display: flex ;
+    justify-content: center ;
+    align-items: center ;
+    padding: 15px ;
+    background: var(--fifth-color) ;
+}
+
+.stats-header span {
+    font-weight: bold ;
+    text-transform: uppercase ;
+    letter-spacing: 1px ;
+}
+
+.stats-content {
+    padding: 15px ;
+}
+
+.stats-content hr {
+    border: none ;
+    margin-bottom: 15px ;
+    border-top: 1px solid var(--third-color) ;
+    opacity: 0.3 ;
+}
+
+.stat-row {
+    display: flex ;
+    justify-content: space-between ;
+    align-items: center ;
+}
+
+.name-row {
+    justify-content: center;
+    padding-bottom: 8px;
+}
+
+.player-name {
+    font-size: 18px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.stat-label {
+    color: var(--text-color) ;
+    opacity: 0.8 ;
+    font-size: 11px ;
+    text-transform: uppercase ;
+    letter-spacing: 0.5px ;
+}
+
+.stat-value {
+    font-size: 14px ;
+    font-weight: 600 ;
+}
+
+.progress-bar {
+    height: 8px ;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px ;
+    overflow: hidden ;
+    margin: 8px 0 18px 0 ;
+}
+
+.progress-fill {
+    height: 100% ;
+    border-radius: 4px ;
+}
+
+.progress-fill.health {
+    background: linear-gradient(90deg, var(--primary-color), #e4d9c4) ;
+}
+
+.stat-row-inline {
+    display: flex ;
+    justify-content: space-around ;
+    padding: 4px 0 ;
+}
+
+.mini-stat {
+    display: flex ;
+    flex-direction: column ;
+    align-items: center ;
+    gap: 4px ;
+}
+
+.mini-icon {
+    font-size: 20px ;
+}
+
+.mini-value {
+    font-size: 14px ;
+    font-weight: 600 ;
+}
+
+.badges-section {
+    margin-bottom: 12px ;
+}
+
+.badges-container {
+    display: flex ;
+    flex-wrap: wrap ;
+    gap: 6px ;
+    margin-top: 8px;
+}
+
+.badge {
+    padding: 4px 10px ;
+    border-radius: 12px ;
+    font-size: 10px ;
+    font-weight: 700 ;
+    text-transform: uppercase ;
+    letter-spacing: 0.3px ;
+}
+
+.badge.weapon, .badge.discipline {
+    background: linear-gradient(150deg, var(--primary-color), var(--fourth-color)) ;
+    color: var(--secondary-color) ;
+}

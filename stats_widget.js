@@ -12,7 +12,7 @@ function createStatsWidget() {
     // Crée le bouton flottant
     const floatingBtn = document.createElement('button');
     floatingBtn.id = 'stats-toggle';
-    floatingBtn.innerHTML = "<i class='bx bx-file'></i>";
+    floatingBtn.innerHTML = `<svg  xmlns="http://www.w3.org/2000/svg" width="48" height="48"  fill="currentColor" viewBox="2 2 20 20" ><!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free--><path d="M12 2a5 5 0 1 0 0 10 5 5 0 1 0 0-10M4 22h16c.55 0 1-.45 1-1v-1c0-3.86-3.14-7-7-7h-4c-3.86 0-7 3.14-7 7v1c0 .55.45 1 1 1"></path></svg>`;
     floatingBtn.title = 'Voir les stats';
     document.body.appendChild(floatingBtn);
 
@@ -22,7 +22,6 @@ function createStatsWidget() {
     statsPanel.innerHTML = `
         <div class="stats-header">
             <span>Player Stats</span>
-            <button id="stats-close">✕</button>
         </div>
         <div class="stats-content"></div>
     `;
@@ -87,9 +86,11 @@ function createStatsWidget() {
                     <span class="player-name">${player.name || 'Unknown'}</span>
                 </div>
 
+                <hr>
+
                 <div class="stat-section">
                     <div class="stat-row">
-                        <span class="stat-label">❤️ Endurance</span>
+                        <span class="stat-label">Endurance</span>
                         <span class="stat-value">${player.endurance} / ${player.enduranceMax}</span>
                     </div>
                     <div class="progress-bar">
@@ -99,24 +100,31 @@ function createStatsWidget() {
 
                 <div class="stat-section">
                     <div class="stat-row">
-                        <span class="stat-label">⚔️ Combat Skill</span>
+                        <span class="stat-label">Combat Skill</span>
                         <span class="stat-value">${player.combatSkill}</span>
                     </div>
                 </div>
 
                 <hr>
 
+                <span class="stat-label">Inventory</span>
                 <div class="stat-row-inline">
                     <div class="mini-stat">
-                        <span class="mini-icon">🪙</span>
+                        <span class="mini-icon">
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="currentColor" viewBox="0 0 24 24" ><!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free--><path d="M21.98 9.34C21.79 6.49 16.87 5 12 5S2.21 6.49 2.02 9.34c.19 1.95 4.23 4.06 9.98 4.06s9.8-2.11 9.98-4.06M13 19c1.39-.06 2.76-.24 4-.54v-3.59c-1.23.28-2.57.45-4 .51v3.63Zm-6-.54c1.24.3 2.61.48 4 .54v-3.63a22.3 22.3 0 0 1-4-.51v3.59Zm12-.64c1.8-.76 3-1.86 3-3.3v-1.79c-.8.62-1.82 1.16-3 1.58zm-17-3.3c0 1.44 1.2 2.55 3 3.3v-3.51c-1.18-.43-2.2-.96-3-1.58z"></path></svg>
+                        </span>
                         <span class="mini-value">${player.bag?.gold || 0}</span>
                     </div>
                     <div class="mini-stat">
-                        <span class="mini-icon">🍖</span>
+                        <span class="mini-icon">
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="currentColor" viewBox="0 0 24 24" ><!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free--><path d="M3.5 8c.35 0 .66-.12.92-.32l.64.96c-1.78.91-3.01 2.73-3.01 4.86 0 3 2.44 5.46 5.45 5.5h7.76c2.73 0 5.14-1.55 6.13-3.95.48-1.15.67-2.38.58-3.64-.27-3.71-3.24-6.86-6.92-7.34-2.59-.33-5.1.61-6.82 2.42C11.3 7.61 13.5 10.55 13.5 14h-2c0-2.71-1.81-4.98-4.28-5.72L6.23 6.8c.45-.26.76-.74.76-1.3 0-.83-.67-1.5-1.5-1.5-.69 0-1.27.47-1.44 1.11A1.498 1.498 0 0 0 1.99 6.5c0 .83.67 1.5 1.5 1.5Z"></path></svg>
+                        </span>
                         <span class="mini-value">${player.bag?.meals || 0}</span>
                     </div>
                     <div class="mini-stat">
-                        <span class="mini-icon">🧪</span>
+                        <span class="mini-icon">
+                            <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  fill="currentColor" viewBox="0 0 24 24" ><!--Boxicons v3.0.8 https://boxicons.com | License  https://docs.boxicons.com/free--><path d="M15 7.66V4h1V2H8v2h1v3.66l-5.4 6.95a4.58 4.58 0 0 0-.48 4.86A4.56 4.56 0 0 0 7.22 22h9.57c1.75 0 3.32-.97 4.1-2.53.78-1.57.6-3.48-.48-4.86l-5.4-6.95Zm-4 .69V4.01h2v4.34l5.2 6.68c-1.79-.3-2.9-1.03-4.14-1.86-1.31-.87-2.77-1.83-5.11-2.18z"></path></svg>
+                        </span>
                         <span class="mini-value">${player.bag?.potionsHealing || 0}</span>
                     </div>
                 </div>
@@ -124,12 +132,12 @@ function createStatsWidget() {
                 <hr>
 
                 <div class="badges-section">
-                    <span class="stat-label">⚔️ Weapons</span>
+                    <span class="stat-label">Weapons</span>
                     <div class="badges-container">${weaponBadges}</div>
                 </div>
 
                 <div class="badges-section">
-                    <span class="stat-label">✨ Disciplines</span>
+                    <span class="stat-label">Disciplines</span>
                     <div class="badges-container">${disciplineBadges}</div>
                 </div>
             `;
@@ -141,229 +149,19 @@ function createStatsWidget() {
 
 // Injecte les styles CSS
 function injectStyles() {
-    // Import Google Font
-    const fontLink = document.createElement('link');
-    fontLink.href = 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';
-    fontLink.rel = 'stylesheet';
-    document.head.appendChild(fontLink);
+    const scriptEl = document.querySelector('script[src$="stats_widget.js"]');
+    const cssHref = scriptEl
+        ? new URL('stats_widget.css', scriptEl.src).href
+        : 'stats_widget.css';
 
-    // Import BoxIcons
-    const boxIconsLink = document.createElement('link');
-    boxIconsLink.href = 'https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css';
-    boxIconsLink.rel = 'stylesheet';
-    document.head.appendChild(boxIconsLink);
+    if (document.querySelector(`link[href="${cssHref}"]`)) {
+        return;
+    }
 
-    const style = document.createElement('style');
-    style.textContent = `
-        #stats-panel, #stats-panel * {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-        }
-
-        #stats-toggle {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #282828 0%, #131313 100%);
-            border: none;
-            font-size: 24px;
-            color: #e4a934;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 9999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        #stats-toggle:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.4);
-        }
-
-        #stats-panel {
-            position: fixed;
-            bottom: 80px;
-            right: 20px;
-            width: 300px;
-            background: linear-gradient(145deg, #282828 0%, #131313 100%);
-            border: none;
-            border-radius: 12px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
-            opacity: 0;
-            transform: translateY(20px) scale(0.9);
-            transition: opacity 0.3s, transform 0.3s;
-            pointer-events: none;
-            z-index: 9998;
-            overflow: hidden;
-        }
-
-        #stats-panel.visible {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-            pointer-events: auto;
-        }
-
-        .stats-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 16px;
-            background: rgba(255, 255, 255, 0.05);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-
-        .stats-header span {
-            color: #fff;
-            font-weight: bold;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        #stats-close {
-            background: none;
-            border: none;
-            color: #888;
-            font-size: 18px;
-            cursor: pointer;
-            padding: 0;
-            line-height: 1;
-        }
-
-        #stats-close:hover {
-            color: #fff;
-        }
-
-        .stats-content {
-            padding: 12px 16px;
-        }
-
-        .stats-content hr {
-            border: none;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            margin: 10px 0;
-        }
-
-        .stat-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 4px 0;
-        }
-
-        .name-row {
-            justify-content: center;
-            padding-bottom: 8px;
-        }
-
-        .player-name {
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .stat-section {
-            margin: 8px 0;
-        }
-
-        .stat-label {
-            color: #888;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .stat-value {
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        /* Progress Bar */
-        .progress-bar {
-            height: 8px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-top: 6px;
-        }
-
-        .progress-fill {
-            height: 100%;
-            border-radius: 4px;
-            transition: width 0.3s ease;
-        }
-
-        .progress-fill.health {
-            background: linear-gradient(90deg, #ef4444 0%, #22c55e 100%);
-        }
-
-        /* Mini Stats Row */
-        .stat-row-inline {
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-        }
-
-        .mini-stat {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .mini-icon {
-            font-size: 20px;
-        }
-
-        .mini-value {
-            color: #fff;
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        /* Badges Section */
-        .badges-section {
-            margin: 10px 0;
-        }
-
-        .badges-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin-top: 6px;
-        }
-
-        .badge {
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.3px;
-        }
-
-        .badge.weapon {
-            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-            color: #fff;
-        }
-
-        .badge.discipline {
-            background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%);
-            color: #fff;
-        }
-
-        .badge.empty {
-            background: rgba(255, 255, 255, 0.1);
-            color: #666;
-        }
-    `;
-    document.head.appendChild(style);
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = cssHref;
+    document.head.appendChild(link);
 }
 
 // Initialisation au chargement de la page
