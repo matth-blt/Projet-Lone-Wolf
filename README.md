@@ -21,6 +21,6 @@
 
 ## Auteurs
 
-- Matthieu BALLOUT
-- Ethan COCHARD
-- Lia ZADOROZNYJ
+- BALLOUT Matthieu
+- ZADOROZNYJ Lia
+- COCHARD Ethan
